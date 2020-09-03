@@ -16,7 +16,7 @@ const Dashboard = React.memo(function Dashboard() {
     myStakes,
     proposals,
     proposalPanel,
-    totalActiveTokens,
+    totalStaked,
   } = useAppLogic()
 
   const { account } = useWallet()
@@ -34,7 +34,7 @@ const Dashboard = React.memo(function Dashboard() {
       onWithdrawFromProposal={actions.withdrawFromProposal}
       proposals={proposals}
       selectedProposal={selectedProposal}
-      totalActiveTokens={totalActiveTokens}
+      totalActiveTokens={totalStaked}
     />
   )
 

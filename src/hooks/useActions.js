@@ -17,7 +17,7 @@ export default function useActions(onDone) {
         organization,
         convictionVoting.address,
         'addProposal',
-        [title, toHex(link), amount, beneficiary],
+        [title, link ? toHex(link) : '0x', amount, beneficiary],
         { ethers, from: account }
       )
 
@@ -30,7 +30,7 @@ export default function useActions(onDone) {
     async proposalId => {
       sendIntent(
         organization,
-        convictionVoting.appAddress,
+        convictionVoting.address,
         'cancelProposal',
         [proposalId],
         { ethers, from: account }

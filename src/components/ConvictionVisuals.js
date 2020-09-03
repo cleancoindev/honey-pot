@@ -17,6 +17,7 @@ import { useBlockTime } from '../hooks/useBlock'
 
 import BigNumber from '../lib/bigNumber'
 import { formatTokenAmount } from '../lib/token-utils'
+import { PROPOSAL_STATUS_EXECUTED_STRING } from '../constants'
 
 const UNABLE_TO_PASS = 0
 const MAY_PASS = 1
@@ -58,10 +59,12 @@ export function ConvictionBar({ proposal, withThreshold = true }) {
     stakedConviction,
     futureStakedConviction,
     neededConviction,
+    requestedAmount,
   } = proposal
 
   const secondSize = stakedConviction.minus(userStakedConviction)
   const thirdSize = futureStakedConviction.minus(stakedConviction)
+  const signalingProposal = requestedAmount.eq(0)
 
   return (
     <div>
@@ -79,30 +82,31 @@ export function ConvictionBar({ proposal, withThreshold = true }) {
           `}
         >
           {Math.round(stakedConviction * 100)}%{' '}
-          {withThreshold ? (
-            <span
-              css={`
-                color: ${theme.contentSecondary};
-              `}
-            >
-              {neededConviction
-                ? `(${Math.round(
-                    neededConviction.multipliedBy(new BigNumber('100'))
-                  )}% needed)`
-                : `(&infin; needed)`}
-            </span>
-          ) : (
-            <span
-              css={`
-                color: ${theme.contentSecondary};
-              `}
-            >
-              {Math.round(stakedConviction * 100) !==
-              Math.round(futureStakedConviction * 100)
-                ? `(predicted: ${Math.round(futureStakedConviction * 100)}%)`
-                : `(stable)`}
-            </span>
-          )}
+          {!signalingProposal &&
+            (withThreshold ? (
+              <span
+                css={`
+                  color: ${theme.contentSecondary};
+                `}
+              >
+                {neededConviction
+                  ? `(${Math.round(
+                      neededConviction.multipliedBy(new BigNumber('100'))
+                    )}% needed)`
+                  : `(threshold out of range)`}
+              </span>
+            ) : (
+              <span
+                css={`
+                  color: ${theme.contentSecondary};
+                `}
+              >
+                {Math.round(stakedConviction * 100) !==
+                Math.round(futureStakedConviction * 100)
+                  ? `(predicted: ${Math.round(futureStakedConviction * 100)}%)`
+                  : `(stable)`}
+              </span>
+            ))}
         </span>
       </div>
     </div>
@@ -117,7 +121,7 @@ export function ConvictionCountdown({ proposal, shorter }) {
 
   const theme = useTheme()
   const {
-    executed,
+    status,
     threshold,
     remainingTimeToPass,
     neededTokens,
@@ -125,7 +129,7 @@ export function ConvictionCountdown({ proposal, shorter }) {
   } = proposal
 
   const view = useMemo(() => {
-    if (executed) {
+    if (status === PROPOSAL_STATUS_EXECUTED_STRING) {
       return EXECUTED
     }
     if (currentConviction.gte(threshold)) {
@@ -135,7 +139,7 @@ export function ConvictionCountdown({ proposal, shorter }) {
       return MAY_PASS
     }
     return UNABLE_TO_PASS
-  }, [currentConviction, executed, threshold, remainingTimeToPass])
+  }, [currentConviction, status, threshold, remainingTimeToPass])
 
   return (
     <div

@@ -17,6 +17,10 @@ import Balance from '../Balance'
 import FilterBar from '../FilterBar/FilterBar'
 import IdentityBadge from '../IdentityBadge'
 import { useWallet } from '../../providers/Wallet'
+import {
+  PROPOSAL_STATUS_EXECUTED_STRING,
+  PROPOSAL_STATUS_ACTIVE_STRING,
+} from '../../constants'
 
 import { getTokenIconBySymbol } from '../../lib/token-utils'
 import { addressesEqualNoSum as addressesEqual } from '../../lib/web3-utils'
@@ -179,7 +183,10 @@ const Proposals = React.memo(
                 selectProposal={handleSelectProposal}
               />,
             ]
-            if (proposal.executed || !requestToken) {
+            if (
+              proposal.status === PROPOSAL_STATUS_EXECUTED_STRING ||
+              !requestToken
+            ) {
               entriesElements.push(
                 <Link href={proposal.link} external>
                   Read more
@@ -194,12 +201,12 @@ const Proposals = React.memo(
                 />
               )
             }
-            if (!proposal.executed) {
+            if (proposal.status === PROPOSAL_STATUS_ACTIVE_STRING) {
               entriesElements.push(
                 <ProposalInfo proposal={proposal} requestToken={requestToken} />
               )
             }
-            if (proposal.executed) {
+            if (proposal.status === PROPOSAL_STATUS_EXECUTED_STRING) {
               entriesElements.push(
                 <IdentityBadge
                   connectedAccount={addressesEqual(
