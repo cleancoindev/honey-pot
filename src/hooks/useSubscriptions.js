@@ -1,11 +1,7 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import {
-  transformConfigData,
-  transformProposalData,
-  transformStakeHistoryData,
-} from '../lib/data-utils'
+import { transformConfigData, transformProposalData } from '../lib/data-utils'
 
-export function useConfigSubscription(convictionVoting) {
+export function useConfigSubscription(honeypot) {
   const [config, setConfig] = useState(null)
 
   const configSubscription = useRef(null)
@@ -19,70 +15,43 @@ export function useConfigSubscription(convictionVoting) {
   }, [])
 
   useEffect(() => {
-    if (!convictionVoting) {
+    if (!honeypot) {
       return
     }
 
-    configSubscription.current = convictionVoting.onConfig(onConfigHandler)
+    configSubscription.current = honeypot.onConfig(onConfigHandler)
 
     return () => configSubscription.current.unsubscribe()
-  }, [convictionVoting, onConfigHandler])
+  }, [honeypot, onConfigHandler])
 
   return config
 }
 
-export function useProposalsSubscription(convictionVoting) {
+export function useProposalsSubscription(honeypot) {
   const [proposals, setProposals] = useState([])
 
   const proposalsSubscription = useRef(null)
 
   const onProposalsHandler = useCallback((proposals = []) => {
+    if (!proposals) {
+      return
+    }
+
+    console.log('propsosals', proposals)
+
     const transformedProposals = proposals.map(transformProposalData)
     setProposals(transformedProposals)
   }, [])
 
   useEffect(() => {
-    if (!convictionVoting) {
+    if (!honeypot) {
       return
     }
 
-    proposalsSubscription.current = convictionVoting.onProposals(
-      {},
-      onProposalsHandler
-    )
+    proposalsSubscription.current = honeypot.onProposals({}, onProposalsHandler)
 
     return () => proposalsSubscription.current.unsubscribe()
-  }, [convictionVoting, onProposalsHandler])
+  }, [honeypot, onProposalsHandler])
 
   return proposals
-}
-
-export function useStakesHistorySubscription(convictionVoting) {
-  const [stakes, setStakes] = useState([])
-
-  const stakesSubscription = useRef(null)
-
-  const onStakesHandler = useCallback((stakes = []) => {
-    const transformedStakes = stakes
-      .map(transformStakeHistoryData)
-      .sort((s1, s2) => s1.time - s2.time) // TODO: Remove when subgraph query updated
-    setStakes(transformedStakes)
-  }, [])
-
-  useEffect(() => {
-    if (!convictionVoting) {
-      return
-    }
-
-    stakesSubscription.current = convictionVoting.onStakesHistory(
-      {},
-      onStakesHandler
-    )
-
-    return () => {
-      stakesSubscription.current.unsubscribe()
-    }
-  }, [convictionVoting, onStakesHandler])
-
-  return stakes
 }

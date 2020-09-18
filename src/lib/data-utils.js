@@ -20,10 +20,11 @@ export function transformProposalData(proposal) {
       ...stake,
       amount: new BigNumber(amount),
     })),
+    stakesHistory: proposal.stakesHistory.map(transformStakeHistoryData),
   }
 }
 
-export function transformStakeHistoryData(stake) {
+function transformStakeHistoryData(stake) {
   return {
     ...stake,
     tokensStaked: BigNumber(stake.tokensStaked),

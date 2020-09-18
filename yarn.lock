@@ -125,14 +125,22 @@
     recursive-copy "^2.0.9"
     use-inside "^0.2.0"
 
-"@1hive/connect-conviction-voting@^0.3.0":
-  version "0.3.0"
-  resolved "https://registry.yarnpkg.com/@1hive/connect-conviction-voting/-/connect-conviction-voting-0.3.0.tgz#b1a45f70a0c07a52eede9ba62e32e50c6430e91d"
-  integrity sha512-TyMOqjiJw7MkRDHTVUwHa8/ZrR52+mzPQSJclktyyfaa1WaT+KdSe1mkDFPgm0f+cqXgkJ5kHUwXcydFjnojDA==
+"@1hive/connect-honey-pot@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@1hive/connect-honey-pot/-/connect-honey-pot-0.0.2.tgz#5b27766aa62521f2d04136fd95da779b80ee129c"
+  integrity sha512-nldaP36DBrDEbHT3lxr1/dzY7+F5uz3DM8zFnDwRprJwvHYo9tuIz46xNUDKKk3ZyoMzwWOx0N6VulHmyRptfw==
   dependencies:
-    "@aragon/connect-core" "^0.6.0"
-    "@aragon/connect-thegraph" "^0.6.0"
+    "@aragon/connect-core" "0.7.0"
+    "@aragon/connect-thegraph" "0.7.0"
     graphql-tag "^2.10.3"
+
+"@aragon/connect-core@0.7.0", "@aragon/connect-core@^0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-core/-/connect-core-0.7.0.tgz#2464a1ce136fb1166d0de32fcada5a8c5da6e2dc"
+  integrity sha512-Edt42nVzuuQ1weVIVILIZts8k8//40AYzmikROH9WtWxGQyR41PPf3rLTkVtFnuekfVk/3qr1NSeRXuEJBXzXQ==
+  dependencies:
+    ethers "^5.0.7"
+    radspec "^2.0.0-rc.2"
 
 "@aragon/connect-core@^0.6.0":
   version "0.6.0"
@@ -148,6 +156,19 @@
   integrity sha512-qRpZwYKCz9qm+kxiyqrUuJDMbKTZAt+t9Cgvs99NRvF2G/opr4lHX6LjdIYIuUUo8QJBD78pun41bavTUHm8Zg==
   dependencies:
     "@aragon/connect-core" "^0.6.0"
+
+"@aragon/connect-thegraph@0.7.0":
+  version "0.7.0"
+  resolved "https://registry.yarnpkg.com/@aragon/connect-thegraph/-/connect-thegraph-0.7.0.tgz#f4331d19ab78f33047b852adbd970efd6cd547b1"
+  integrity sha512-2s7uqMdoMEqr3M4r6tAoNAlOo3+yQRoRwxRy0i8r3mBhmo5kjU/jkfnLQO1SpS3HRHZrMZcc9Tkrj0zlijurDw==
+  dependencies:
+    "@aragon/connect-core" "^0.7.0"
+    "@urql/core" "^1.11.7"
+    graphql "^15.0.0"
+    graphql-tag "^2.10.3"
+    isomorphic-unfetch "^3.0.0"
+    isomorphic-ws "^4.0.1"
+    subscriptions-transport-ws "^0.9.16"
 
 "@aragon/connect-thegraph@^0.6.0":
   version "0.6.0"
@@ -16356,7 +16377,7 @@ rabin-wasm@^0.1.1:
     node-fetch "^2.6.0"
     readable-stream "^3.6.0"
 
-radspec@^2.0.0-rc.1:
+radspec@^2.0.0-rc.1, radspec@^2.0.0-rc.2:
   version "2.0.0-rc.2"
   resolved "https://registry.yarnpkg.com/radspec/-/radspec-2.0.0-rc.2.tgz#0ab09853586ab34be3099dde774880a200d14047"
   integrity sha512-etB24HzGpuqngCqTLOKCmJw6YWcyaaHMZth5mzpTHB5jqkL2VWkr8O0rjzxqV0DKZmKBF07mEQuHbod9sKo8mw==
