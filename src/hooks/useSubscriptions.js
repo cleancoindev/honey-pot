@@ -6,8 +6,8 @@ export function useConfigSubscription(honeypot) {
 
   const configSubscription = useRef(null)
 
-  const onConfigHandler = useCallback(config => {
-    if (!config) {
+  const onConfigHandler = useCallback((err, config) => {
+    if (err || !config) {
       return
     }
     const transformedConfig = transformConfigData(config)
@@ -32,12 +32,10 @@ export function useProposalsSubscription(honeypot) {
 
   const proposalsSubscription = useRef(null)
 
-  const onProposalsHandler = useCallback((proposals = []) => {
-    if (!proposals) {
+  const onProposalsHandler = useCallback((err, proposals = []) => {
+    if (err || !proposals) {
       return
     }
-
-    console.log('propsosals', proposals)
 
     const transformedProposals = proposals.map(transformProposalData)
     setProposals(transformedProposals)

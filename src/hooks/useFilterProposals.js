@@ -55,10 +55,10 @@ function testTypeFilter(filter, proposalStatus) {
   )
 }
 
-function testSearchFilter(proposalName, textSearch) {
+function testSearchFilter(text, textSearch) {
   return (
-    proposalName.toUpperCase().includes(textSearch.toUpperCase()) ||
-    checkInitialLetters(proposalName, textSearch)
+    text.toUpperCase().includes(textSearch.toUpperCase()) ||
+    checkInitialLetters(text, textSearch)
   )
 }
 
@@ -84,7 +84,7 @@ const useFilterProposals = (proposals, myStakes) => {
           testExecutionFilter(executionFilter, proposalExecutionStatus) &&
           testTypeFilter(typeFilter, proposalTypeStatus) &&
           testSupportFilter(supportFilter, proposalSupportStatus) &&
-          testSearchFilter(proposal.name, textSearch)
+          testSearchFilter(proposal.name || proposal.metadata, textSearch)
         )
       }),
     [

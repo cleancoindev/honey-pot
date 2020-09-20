@@ -84,7 +84,6 @@ export function useAppData(organization) {
         )
 
         const honeypot = await connectHoneypot(organization)
-        console.log('props', await honeypot.proposals())
 
         if (!cancelled) {
           setAppData(appData => ({
@@ -110,7 +109,7 @@ export function useAppData(organization) {
   const config = useConfigSubscription(appData.honeypot)
   const proposals = useProposalsSubscription(appData.honeypot)
 
-  return { ...appData, ...config, proposals }
+  return { ...appData, config, proposals }
 }
 
 export function useVaultBalance(installedApps, token, timeout = 1000) {
