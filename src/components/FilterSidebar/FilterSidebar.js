@@ -5,7 +5,7 @@ import PropTypes from 'prop-types'
 import TextFilter from './TextFilter'
 import DropdownFilter from './DropdownFilter'
 
-const FilterBar = React.memo(
+const FilterSidebar = React.memo(
   ({
     proposalsSize = 0,
     proposalExecutionStatusFilter,
@@ -29,8 +29,7 @@ const FilterBar = React.memo(
     return (
       <div
         css={`
-          display: flex;
-          align-itmes: center;
+          flex-basis: 25%;
         `}
       >
         <DropDown
@@ -71,7 +70,7 @@ const FilterBar = React.memo(
   }
 )
 
-FilterBar.propTypes = {
+FilterSidebar.propTypes = {
   proposalsSize: PropTypes.number,
   proposalExecutionStatusFilter: PropTypes.number.isRequired,
   proposalStatusFilter: PropTypes.number.isRequired,
@@ -81,4 +80,4 @@ FilterBar.propTypes = {
   handleTextFilterChange: PropTypes.func.isRequired,
 }
 
-export default FilterBar
+export default FilterSidebar
