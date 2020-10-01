@@ -20,7 +20,7 @@ function AppStateProvider({ children }) {
 
   const vaultBalance = useVaultBalance(installedApps, requestToken)
   const { balance, totalSupply } = useTokenBalances(account, stakeToken)
-  const effectiveSupply = useEffectiveSupply(totalSupply)
+  const effectiveSupply = useEffectiveSupply(totalSupply, config)
 
   const balancesLoading = vaultBalance.eq(-1) || totalSupply.eq(-1)
   const appLoading = balancesLoading || !effectiveSupply

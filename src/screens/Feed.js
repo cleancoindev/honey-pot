@@ -25,7 +25,7 @@ const Feed = React.memo(function Feed() {
         margin-top: ${3 * GU}px;
       `}
     >
-      <SyncIndicator visible={isLoading} />
+      <SyncIndicator visible={isLoading} label="Loading app" />
 
       <MainScreen
         isLoading={isLoading}

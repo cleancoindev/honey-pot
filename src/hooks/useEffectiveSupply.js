@@ -1,13 +1,10 @@
 import { useMemo } from 'react'
-import { useAppData } from './useOrgHooks'
 import { STAKE_PCT_BASE } from '../constants'
 
-export default function useEffectiveSupply(totalSupply) {
-  const { config } = useAppData()
-
+export default function useEffectiveSupply(totalSupply, config) {
   return useMemo(() => {
     if (!config) {
-      return
+      return null
     }
 
     const { minThresholdStakePercentage, totalStaked } = config.conviction

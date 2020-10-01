@@ -125,7 +125,7 @@ export function useVaultBalance(installedApps, token, timeout = 1000) {
     let cancelled = false
     let timeoutId
 
-    if (!vaultContract || !token.id) {
+    if (!vaultContract || !token?.id) {
       return
     }
 
@@ -171,7 +171,7 @@ export function useTokenBalances(account, token, timer = 3000) {
     totalSupply: new BigNumber(-1),
   })
 
-  const tokenContract = useContractReadOnly(token.id, minimeTokenAbi)
+  const tokenContract = useContractReadOnly(token?.id, minimeTokenAbi)
 
   useEffect(() => {
     if (!token?.id || !tokenContract) {
