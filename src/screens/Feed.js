@@ -14,7 +14,6 @@ const Feed = React.memo(function Feed() {
     myStakes,
     proposals,
     proposalPanel,
-    totalStaked,
   } = useAppLogic()
 
   const selectedProposal = useSelectedProposal(proposals)
@@ -30,15 +29,13 @@ const Feed = React.memo(function Feed() {
       <MainScreen
         isLoading={isLoading}
         myStakes={myStakes}
-        onExecuteIssuance={actions.executeIssuance}
-        onExecuteProposal={actions.executeProposal}
         onCancelProposal={actions.cancelProposal}
+        onExecuteProposal={actions.executeProposal}
         onRequestNewProposal={proposalPanel.requestOpen}
         onStakeToProposal={actions.stakeToProposal}
         onWithdrawFromProposal={actions.withdrawFromProposal}
         proposals={proposals}
         selectedProposal={selectedProposal}
-        totalActiveTokens={totalStaked}
       />
 
       <SidePanel
