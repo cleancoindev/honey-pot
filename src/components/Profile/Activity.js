@@ -1,13 +1,13 @@
 import React from 'react'
-import styled from 'styled-components'
 import { Box, GU, Link, textStyle, useTheme } from '@1hive/1hive-ui'
 
-import { useAccountStakesHistory } from '../../hooks/useStakes'
+import ProposalIcon from '../ProposalIcon'
+import { useAppState } from '../../providers/AppState'
 
 function Activity({ account }) {
   const theme = useTheme()
 
-  const myStakeHistory = useAccountStakesHistory(account)
+  const supporter = useAppState()
 
   return (
     <Box>
@@ -21,8 +21,8 @@ function Activity({ account }) {
           Recent activity
         </h3>
         <div>
-          {myStakeHistory.length ? (
-            myStakeHistory.map((stake, index) => (
+          {supporter?.stakesHistory.length ? (
+            supporter?.stakesHistory.map((stake, index) => (
               <div
                 key={index}
                 css={`
@@ -36,16 +36,17 @@ function Activity({ account }) {
                   }
                 `}
               >
-                You supported <ProposalIcon /> Proposal{' '}
+                You supported <ProposalIcon type={stake.proposal.type} />{' '}
+                Proposal{' '}
                 <Link
-                  href={`/#/proposal/${stake.proposalId}`}
+                  href={`/#/proposal/${stake.proposal.id}`}
                   external={false}
                   css={`
                     margin-left: ${1 * GU}px;
                     text-decoration: none;
                   `}
                 >
-                  {stake.proposalName}
+                  {stake.proposal.name}
                 </Link>
               </div>
             ))
@@ -57,13 +58,5 @@ function Activity({ account }) {
     </Box>
   )
 }
-
-const ProposalIcon = styled.div`
-  width: ${1.5 * GU}px;
-  height: ${1.5 * GU}px;
-  background: #ffdd0f;
-  transform: rotate(45deg);
-  margin: 0 ${1 * GU}px;
-`
 
 export default Activity

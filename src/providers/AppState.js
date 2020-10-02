@@ -30,6 +30,7 @@ function AppStateProvider({ children }) {
       value={{
         ...appData,
         accountBalance: balance,
+        config,
         effectiveSupply,
         installedApps,
         isLoading: appLoading,

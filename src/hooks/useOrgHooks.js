@@ -6,6 +6,7 @@ import { useContractReadOnly } from './useContract'
 import {
   useConfigSubscription,
   useProposalsSubscription,
+  useSupporterSubscription,
 } from './useSubscriptions'
 import { useWallet } from '../providers/Wallet'
 
@@ -23,12 +24,9 @@ import vaultAbi from '../abi/vault-balance.json'
 
 const DEFAULT_APP_DATA = {
   honeypot: null,
-  stakeToken: {},
-  requestToken: {},
-  proposals: [],
-  alpha: BigNumber(0),
-  maxRatio: BigNumber(0),
-  weight: BigNumber(0),
+  installedApps: [],
+  organization: null,
+  permissions: [],
 }
 
 export function useOrganzation() {
@@ -108,8 +106,9 @@ export function useAppData(organization) {
 
   const config = useConfigSubscription(appData.honeypot)
   const proposals = useProposalsSubscription(appData.honeypot)
+  const supporter = useSupporterSubscription(appData.honeypot)
 
-  return { ...appData, config, proposals }
+  return { ...appData, config, proposals, supporter }
 }
 
 export function useVaultBalance(installedApps, token, timeout = 1000) {

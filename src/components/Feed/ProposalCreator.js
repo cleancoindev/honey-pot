@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { EthIdenticon, GU, shortenAddress } from '@1hive/1hive-ui'
 
 import { getProfileForAccount } from '../../lib/profile'
+import { convertToString } from '../../types'
 
 const addressCache = new Map()
 
@@ -66,7 +67,7 @@ function ProposalCreator({ proposal }) {
           >
             {profile?.name ? profile.name : shortenAddress(proposal.creator)}
           </strong>
-          created a {proposal.type}
+          created a {convertToString(proposal.type)}
         </div>
         <div>{proposal.createdAt}</div>
       </div>

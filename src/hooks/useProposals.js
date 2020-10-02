@@ -18,15 +18,15 @@ const TIME_UNIT = (60 * 60 * 24) / 15
 export function useProposals() {
   const { account } = useWallet()
   const {
-    alpha,
+    config,
     isLoading,
-    maxRatio,
     proposals = [],
     stakesHistory = [],
     vaultBalance,
-    weight,
     effectiveSupply,
   } = useAppState()
+
+  const { alpha, maxRatio, weight } = config?.conviction || {}
 
   const latestBlock = useLatestBlock()
 

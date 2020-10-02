@@ -1,3 +1,4 @@
+import { convertFromString } from '../types'
 import BigNumber from './bigNumber'
 
 export function transformConfigData(config) {
@@ -24,27 +25,44 @@ export function transformConfigData(config) {
 }
 
 export function transformProposalData(proposal) {
+  // TODO: transform casts
   return {
     ...proposal,
-    requestedAmount: new BigNumber(proposal.requestedAmount),
     id: proposal.number,
-    stakes: proposal.stakes.map(({ amount, ...stake }) => ({
-      ...stake,
-      amount: new BigNumber(amount),
-    })),
+    requestedAmount: new BigNumber(proposal.requestedAmount),
+    stakes: proposal.stakes.map(transformStakeData),
     stakesHistory: proposal.stakesHistory.map(transformStakeHistoryData),
+    type: convertFromString(proposal.type),
+  }
+}
+
+export function transformSupporterData(supporter) {
+  // TODO: transform casts
+  return {
+    ...supporter,
+    stakes: supporter.stakes.map(transformStakeData),
+    stakesHistory: supporter.stakesHistory.map(transformStakeHistoryData),
+  }
+}
+
+function transformStakeData(stake) {
+  return {
+    ...stake,
+    amount: new BigNumber(stake.amount),
+    createdAt: parseInt(stake.createdAt, 10),
   }
 }
 
 function transformStakeHistoryData(stake) {
   return {
     ...stake,
+    conviction: BigNumber(stake.conviction),
+    createdAt: parseInt(stake.createdAt, 10),
     tokensStaked: BigNumber(stake.tokensStaked),
     totalTokensStaked: BigNumber(stake.totalTokensStaked),
-    conviction: BigNumber(stake.conviction),
   }
 }
 
 export function getAppAddressByName(apps, appName) {
-  return apps?.find(app => app.name === appName).address || ''
+  return apps?.find(app => app.name === appName)?.address || ''
 }

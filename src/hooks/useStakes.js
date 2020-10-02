@@ -4,6 +4,7 @@ import { useAppState } from '../providers/AppState'
 import { addressesEqual } from '../lib/web3-utils'
 import { PROPOSAL_STATUS_ACTIVE_STRING } from '../constants'
 
+// TODO: Use supporter stakes
 export function useAccountStakes(account) {
   const { proposals, stakeToken } = useAppState()
 
@@ -21,7 +22,8 @@ export function useAccountStakes(account) {
       }
 
       const myStake = proposal.stakes.find(
-        stake => addressesEqual(stake.entity, account) && stake.amount.gt(0)
+        stake =>
+          addressesEqual(stake.entity.address, account) && stake.amount.gt(0)
       )
 
       if (!myStake) {
@@ -38,22 +40,4 @@ export function useAccountStakes(account) {
       ]
     }, [])
   }, [account, proposals, stakeToken])
-}
-
-export function useAccountStakesHistory(account) {
-  const { proposals, stakesHistory } = useAppState()
-
-  return useMemo(
-    () =>
-      stakesHistory
-        .filter(stake => addressesEqual(stake.entity, account))
-        .map(stake => {
-          const proposal = proposals.find(
-            proposal => proposal.id === stake.proposalId
-          )
-
-          return { ...stake, proposalName: proposal?.name }
-        }),
-    [account, proposals, stakesHistory]
-  )
 }

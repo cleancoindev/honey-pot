@@ -1,5 +1,10 @@
 import { useCallback, useEffect, useRef, useState } from 'react'
-import { transformConfigData, transformProposalData } from '../lib/data-utils'
+import {
+  transformConfigData,
+  transformProposalData,
+  transformSupporterData,
+} from '../lib/data-utils'
+import { useWallet } from '../providers/Wallet'
 
 export function useConfigSubscription(honeypot) {
   const [config, setConfig] = useState(null)
@@ -52,4 +57,37 @@ export function useProposalsSubscription(honeypot) {
   }, [honeypot, onProposalsHandler])
 
   return proposals
+}
+
+export function useSupporterSubscription(honeypot) {
+  const { account } = useWallet()
+  const [supporter, setSupporter] = useState([])
+
+  const supporterSubscription = useRef(null)
+
+  const onSupporterHandler = useCallback((err, supporter) => {
+    if (err || !supporter) {
+      return
+    }
+
+    const transformedSupported = transformSupporterData(supporter)
+    setSupporter(transformedSupported)
+  }, [])
+
+  useEffect(() => {
+    if (!honeypot || !account) {
+      return
+    }
+
+    supporterSubscription.current = honeypot.onSupporter(
+      { id: account },
+      onSupporterHandler
+    )
+
+    return () => {
+      supporterSubscription.current.unsubscribe()
+    }
+  }, [account, honeypot, onSupporterHandler])
+
+  return supporter
 }
