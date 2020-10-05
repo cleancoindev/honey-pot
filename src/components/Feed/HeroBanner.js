@@ -1,27 +1,61 @@
 import React from 'react'
-import { Button, IconPlus } from '@1hive/1hive-ui'
+import { Button, GU, IconPlus, textStyle, useLayout } from '@1hive/1hive-ui'
 import { useWallet } from '../../providers/Wallet'
+
+import desktopBanner from '../../assets/banner.png'
+import mobileBanner from '../../assets/banner-mobile.png'
+
+const BANNERS = {
+  small: mobileBanner,
+  medium: desktopBanner,
+  large: desktopBanner,
+}
 
 function HeroBanner({ onRequestNewProposal }) {
   const { account } = useWallet()
+
+  const { layoutName } = useLayout()
+  const compactMode = layoutName === 'small'
+  const banner = BANNERS[layoutName]
 
   return (
     <div
       css={`
         flex-basis: 25%;
-        text-align: right;
-        outline: 1px solid red;
+        margin-left: ${3 * GU}px;
       `}
     >
-      Hero Banner
-      {account && (
-        <Button
-          mode="strong"
-          onClick={onRequestNewProposal}
-          label="New proposal"
-          icon={<IconPlus />}
-        />
-      )}
+      <div
+        css={`
+          background: url(${banner}) no-repeat;
+
+          height: 100%;
+
+          width: 327px;
+          padding: ${8 * GU}px;
+          text-align: center;
+        `}
+      >
+        <h2
+          css={`
+            ${textStyle('title2')};
+            margin-bottom: ${3 * GU}px;
+          `}
+        >
+          {account
+            ? `The community wants to hear from you!`
+            : `Connect your account to create a proposal`}
+        </h2>
+        {account && (
+          <Button
+            mode="strong"
+            onClick={onRequestNewProposal}
+            label="Create proposal"
+            icon={<IconPlus />}
+            display={compactMode ? 'icon' : 'label'}
+          />
+        )}
+      </div>
     </div>
   )
 }
