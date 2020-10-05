@@ -1,43 +1,30 @@
 import { useMemo } from 'react'
 import { useAppState } from '../providers/AppState'
-
-import { addressesEqual } from '../lib/web3-utils'
+import { useSupporterSubscription } from './useSubscriptions'
 import { PROPOSAL_STATUS_ACTIVE_STRING } from '../constants'
 
-// TODO: Use supporter stakes
 export function useAccountStakes(account) {
-  const { proposals, stakeToken } = useAppState()
+  const { honeypot, stakeToken } = useAppState()
+  const supporter = useSupporterSubscription(honeypot, account)
 
   return useMemo(() => {
-    if (!stakeToken || !proposals) {
+    if (!stakeToken || !supporter) {
       return []
     }
 
-    return proposals.reduce((acc, proposal) => {
-      if (
-        !proposal.status === PROPOSAL_STATUS_ACTIVE_STRING ||
-        !proposal.stakes
-      ) {
-        return acc
-      }
-
-      const myStake = proposal.stakes.find(
-        stake =>
-          addressesEqual(stake.entity.address, account) && stake.amount.gt(0)
-      )
-
-      if (!myStake) {
+    return supporter.stakes.reduce((acc, stake) => {
+      if (!stake.proposal.status === PROPOSAL_STATUS_ACTIVE_STRING) {
         return acc
       }
 
       return [
         ...acc,
         {
-          proposalId: proposal.id,
-          proposalName: proposal.name,
-          amount: myStake.amount,
+          proposalId: stake.proposal.id,
+          proposalName: stake.proposal.name,
+          amount: stake.amount,
         },
       ]
     }, [])
-  }, [account, proposals, stakeToken])
+  }, [stakeToken, supporter])
 }

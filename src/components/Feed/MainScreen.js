@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom'
 
 import Proposals from './Proposals'
 import ProposalDetail from './ProposalDetail'
-import { useAppState } from '../../providers/AppState'
 import useFilterProposals from '../../hooks/useFilterProposals'
 
 const MainScreen = React.memo(
@@ -18,8 +17,6 @@ const MainScreen = React.memo(
     proposals,
     selectedProposal,
   }) => {
-    const { requestToken } = useAppState()
-
     const {
       filteredProposals,
       proposalExecutionStatusFilter,
@@ -56,7 +53,6 @@ const MainScreen = React.memo(
             onStakeToProposal={onStakeToProposal}
             onWithdrawFromProposal={onWithdrawFromProposal}
             proposal={selectedProposal}
-            requestToken={requestToken}
           />
         ) : (
           <Proposals
@@ -71,7 +67,6 @@ const MainScreen = React.memo(
             handleExecutionStatusFilterChange={handleTabChange}
             handleSearchTextFilterChange={handleSearchTextFilterChange}
             handleProposalTypeFilterChange={handleProposalTypeFilterChange}
-            requestToken={requestToken}
             onRequestNewProposal={onRequestNewProposal}
           />
         )}

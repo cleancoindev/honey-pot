@@ -6,7 +6,6 @@ import { useContractReadOnly } from './useContract'
 import {
   useConfigSubscription,
   useProposalsSubscription,
-  useSupporterSubscription,
 } from './useSubscriptions'
 import { useWallet } from '../providers/Wallet'
 
@@ -106,9 +105,8 @@ export function useAppData(organization) {
 
   const config = useConfigSubscription(appData.honeypot)
   const proposals = useProposalsSubscription(appData.honeypot)
-  const supporter = useSupporterSubscription(appData.honeypot)
 
-  return { ...appData, config, proposals, supporter }
+  return { ...appData, config, proposals }
 }
 
 export function useVaultBalance(installedApps, token, timeout = 1000) {

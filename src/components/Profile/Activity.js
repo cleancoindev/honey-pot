@@ -3,11 +3,15 @@ import { Box, GU, Link, textStyle, useTheme } from '@1hive/1hive-ui'
 
 import ProposalIcon from '../ProposalIcon'
 import { useAppState } from '../../providers/AppState'
+import { useSupporterSubscription } from '../../hooks/useSubscriptions'
+
+import { convertToString } from '../../types'
 
 function Activity({ account }) {
   const theme = useTheme()
 
-  const supporter = useAppState()
+  const { honeypot } = useAppState()
+  const supporter = useSupporterSubscription(honeypot, account)
 
   return (
     <Box>
@@ -37,7 +41,7 @@ function Activity({ account }) {
                 `}
               >
                 You supported <ProposalIcon type={stake.proposal.type} />{' '}
-                Proposal{' '}
+                {convertToString(stake.proposal.type)}{' '}
                 <Link
                   href={`/#/proposal/${stake.proposal.id}`}
                   external={false}

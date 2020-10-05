@@ -47,15 +47,13 @@ function ProposalDetail({
   onExecuteProposal,
   onStakeToProposal,
   onWithdrawFromProposal,
-  requestToken,
 }) {
   const { layoutName } = useLayout()
 
   const theme = useTheme()
   const panelState = usePanelState()
-  const { vaultBalance, permissions } = useAppState()
-
   const { account: connectedAccount } = useWallet()
+  const { permissions, requestToken, vaultBalance } = useAppState()
 
   const {
     id,

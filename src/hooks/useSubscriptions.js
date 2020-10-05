@@ -4,7 +4,6 @@ import {
   transformProposalData,
   transformSupporterData,
 } from '../lib/data-utils'
-import { useWallet } from '../providers/Wallet'
 
 export function useConfigSubscription(honeypot) {
   const [config, setConfig] = useState(null)
@@ -59,9 +58,8 @@ export function useProposalsSubscription(honeypot) {
   return proposals
 }
 
-export function useSupporterSubscription(honeypot) {
-  const { account } = useWallet()
-  const [supporter, setSupporter] = useState([])
+export function useSupporterSubscription(honeypot, account) {
+  const [supporter, setSupporter] = useState(null)
 
   const supporterSubscription = useRef(null)
 
@@ -80,7 +78,7 @@ export function useSupporterSubscription(honeypot) {
     }
 
     supporterSubscription.current = honeypot.onSupporter(
-      { id: account },
+      { id: account.toLowerCase() },
       onSupporterHandler
     )
 
