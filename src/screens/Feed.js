@@ -1,8 +1,9 @@
 import React from 'react'
-import { GU, SidePanel, SyncIndicator } from '@1hive/1hive-ui'
+import { GU, SidePanel } from '@1hive/1hive-ui'
 
 import AddProposalPanel from '../components/panels/AddProposalPanel'
 import MainScreen from '../components/Feed/MainScreen'
+import Loader from '../components/Loader'
 
 import useAppLogic from '../app-logic'
 import useSelectedProposal from '../hooks/useSelectedProposal'
@@ -24,7 +25,7 @@ const Feed = React.memo(function Feed() {
         margin-top: ${3 * GU}px;
       `}
     >
-      <SyncIndicator visible={isLoading} label="Loading app" />
+      {isLoading && <Loader />}
 
       <MainScreen
         isLoading={isLoading}
