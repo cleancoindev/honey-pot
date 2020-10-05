@@ -1,12 +1,21 @@
 import React, { useEffect, useState } from 'react'
-import { EthIdenticon, GU, shortenAddress } from '@1hive/1hive-ui'
+import {
+  EthIdenticon,
+  GU,
+  shortenAddress,
+  textStyle,
+  useTheme,
+} from '@1hive/1hive-ui'
+import ProposalIcon from '../ProposalIcon'
 
-import { getProfileForAccount } from '../../lib/profile'
 import { convertToString } from '../../types'
+import { getProfileForAccount } from '../../lib/profile'
+import { dateFormat } from '../../utils/date-utils'
 
 const addressCache = new Map()
 
 function ProposalCreator({ proposal }) {
+  const theme = useTheme()
   const [profile, setProfile] = useState(null)
 
   useEffect(() => {
@@ -41,8 +50,8 @@ function ProposalCreator({ proposal }) {
         {profile?.image ? (
           <img
             src={profile.image}
-            height="48"
-            width="48"
+            height="43"
+            width="43"
             alt=""
             css={`
               border-radius: 50%;
@@ -51,7 +60,7 @@ function ProposalCreator({ proposal }) {
             `}
           />
         ) : (
-          <EthIdenticon address={proposal.creator} radius={50} scale={2} />
+          <EthIdenticon address={proposal.creator} radius={50} scale={1.8} />
         )}
       </div>
       <div
@@ -59,7 +68,12 @@ function ProposalCreator({ proposal }) {
           margin-left: ${1 * GU}px;
         `}
       >
-        <div>
+        <div
+          css={`
+            display: flex;
+            align-items: center;
+          `}
+        >
           <strong
             css={`
               margin-right: ${1 * GU}px;
@@ -67,9 +81,17 @@ function ProposalCreator({ proposal }) {
           >
             {profile?.name ? profile.name : shortenAddress(proposal.creator)}
           </strong>
-          created a {convertToString(proposal.type)}
+          created a <ProposalIcon type={proposal.type} />{' '}
+          {convertToString(proposal.type)}
         </div>
-        <div>{proposal.createdAt}</div>
+        <div
+          css={`
+            ${textStyle('body3')};
+            color: ${theme.contentSecondary};
+          `}
+        >
+          {dateFormat(proposal.createdAt, 'custom')}
+        </div>
       </div>
     </div>
   )

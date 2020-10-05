@@ -28,6 +28,7 @@ export function transformProposalData(proposal) {
   // TODO: transform casts
   return {
     ...proposal,
+    createdAt: parseInt(proposal.createdAt, 10) * 1000,
     id: proposal.number,
     requestedAmount: new BigNumber(proposal.requestedAmount),
     stakes: proposal.stakes.map(transformStakeData),
@@ -49,7 +50,7 @@ function transformStakeData(stake) {
   return {
     ...stake,
     amount: new BigNumber(stake.amount),
-    createdAt: parseInt(stake.createdAt, 10),
+    createdAt: parseInt(stake.createdAt, 10) * 1000,
   }
 }
 
@@ -57,7 +58,7 @@ function transformStakeHistoryData(stake) {
   return {
     ...stake,
     conviction: BigNumber(stake.conviction),
-    createdAt: parseInt(stake.createdAt, 10),
+    createdAt: parseInt(stake.createdAt, 10) * 1000,
     tokensStaked: BigNumber(stake.tokensStaked),
     totalTokensStaked: BigNumber(stake.totalTokensStaked),
   }
