@@ -21,12 +21,11 @@ export function useProposals() {
     config,
     isLoading,
     proposals = [],
-    stakesHistory = [],
     vaultBalance,
     effectiveSupply,
   } = useAppState()
 
-  const { alpha, maxRatio, weight } = config?.conviction || {}
+  const { alpha, maxRatio, totalStaked, weight } = config?.conviction || {}
 
   const latestBlock = useLatestBlock()
 
@@ -42,28 +41,17 @@ export function useProposals() {
       let neededTokens = null
       let remainingTimeToPass = null
 
-      const stakes = stakesHistory.filter(
-        stake => parseInt(stake.proposalId) === parseInt(proposal.id)
-      )
-
-      const totalTokensStaked = proposal?.stakes.reduce(
-        (accumulator, stake) => {
-          return accumulator.plus(stake.amount)
-        },
-        new BigNumber('0')
-      )
-
       const maxConviction = getMaxConviction(
         effectiveSupply || new BigNumber('0'),
         alpha
       )
       const currentConviction = getCurrentConviction(
-        stakes,
+        proposal.stakesHistory,
         latestBlock.number,
         alpha
       )
       const userConviction = getCurrentConvictionByEntity(
-        stakes,
+        proposal.stakesHistory,
         account,
         latestBlock.number,
         alpha
@@ -72,10 +60,10 @@ export function useProposals() {
       const userStakedConviction = userConviction.div(maxConviction)
 
       const stakedConviction = currentConviction.div(maxConviction)
-      const futureConviction = getMaxConviction(totalTokensStaked, alpha)
+      const futureConviction = getMaxConviction(totalStaked, alpha)
       const futureStakedConviction = futureConviction.div(maxConviction)
       const convictionTrend = getConvictionTrend(
-        stakes,
+        proposal.stakesHistory,
         maxConviction,
         latestBlock.number,
         alpha,
@@ -97,12 +85,12 @@ export function useProposals() {
 
         minTokensNeeded = getMinNeededStake(threshold, alpha)
 
-        neededTokens = minTokensNeeded.minus(totalTokensStaked)
+        neededTokens = minTokensNeeded.minus(totalStaked)
 
         remainingTimeToPass = getRemainingTimeToPass(
           threshold,
           currentConviction,
-          totalTokensStaked,
+          totalStaked,
           alpha
         )
       }
@@ -122,7 +110,7 @@ export function useProposals() {
         neededTokens,
         remainingTimeToPass,
         convictionTrend,
-        totalTokensStaked,
+        totalStaked,
       }
     })
   }, [
@@ -133,7 +121,7 @@ export function useProposals() {
     latestBlock,
     maxRatio,
     proposals,
-    stakesHistory,
+    totalStaked,
     vaultBalance,
     weight,
   ])
