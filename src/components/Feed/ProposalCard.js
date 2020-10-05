@@ -35,7 +35,7 @@ export default function ProposalCard({ proposal }) {
       <ProposalCreator proposal={proposal} />
       <div
         css={`
-          margin-top: ${3 * GU}px;
+          margin-bottom: ${3 * GU}px;
           ${textStyle('body1')};
         `}
       >
@@ -44,7 +44,7 @@ export default function ProposalCard({ proposal }) {
       {proposal.type === ProposalTypes.Proposal && (
         <div
           css={`
-            margin-top: ${2 * GU}px;
+            margin-bottom: ${2 * GU}px;
             display: flex;
             align-items: center;
             color: ${theme.contentSecondary};
@@ -66,14 +66,35 @@ export default function ProposalCard({ proposal }) {
       )}
       <div
         css={`
-          margin-top: ${2 * GU}px;
+          margin-bottom: ${2 * GU}px;
         `}
       >
+        <div
+          css={`
+            ${textStyle('label2')};
+            color: ${theme.contentSecondary};
+          `}
+        >
+          Current{' '}
+          {proposal.type !== ProposalTypes.Decision ? 'support' : 'votes'}
+        </div>
         {proposal.type !== ProposalTypes.Decision ? (
           <ProposalInfo proposal={proposal} requestToken={requestToken} />
         ) : (
           <div>Decision support</div>
         )}
+      </div>
+      <div
+        css={`
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+
+          color: ${theme.contentSecondary};
+        `}
+      >
+        <div>Support</div>
+        <div>Status : {proposal.status}</div>
       </div>
     </div>
   )
@@ -81,11 +102,7 @@ export default function ProposalCard({ proposal }) {
 
 const ProposalInfo = ({ proposal, requestToken }) => {
   return (
-    <div
-      css={`
-        width: ${23 * GU}px;
-      `}
-    >
+    <div>
       <ConvictionBar
         proposal={proposal}
         withThreshold={Boolean(requestToken)}
