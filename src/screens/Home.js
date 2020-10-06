@@ -8,7 +8,7 @@ import Loader from '../components/Loader'
 import useAppLogic from '../app-logic'
 import useSelectedProposal from '../hooks/useSelectedProposal'
 
-const Feed = React.memo(function Feed() {
+const Home = React.memo(function Home() {
   const {
     actions,
     isLoading,
@@ -50,4 +50,4 @@ const Feed = React.memo(function Feed() {
   )
 })
 
-export default Feed
+export default Home

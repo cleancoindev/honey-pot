@@ -48,7 +48,7 @@ function Header({ compact }) {
               `}
             >
               <a
-                href="#/feed"
+                href="#/home"
                 css={`
                   text-decoration: none;
                   color: ${theme.contentSecondary};
