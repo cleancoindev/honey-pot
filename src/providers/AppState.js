@@ -12,6 +12,8 @@ import { useWallet } from './Wallet'
 
 const AppStateContext = React.createContext()
 
+const PROPOSAL_COUNT_STEP = 5
+
 function AppStateProvider({ children }) {
   const [proposalCount, setProposalCount] = useState(10)
 
@@ -23,7 +25,7 @@ function AppStateProvider({ children }) {
   )
 
   const increaseProposalCount = useCallback(() => {
-    setProposalCount(count => count + 5)
+    setProposalCount(count => count + PROPOSAL_COUNT_STEP)
   }, [])
 
   const { requestToken, stakeToken, totalStaked } = config?.conviction || {}

@@ -3,16 +3,16 @@ import { useHistory } from 'react-router-dom'
 import { GU, textStyle, useTheme } from '@1hive/1hive-ui'
 
 import Balance from '../Balance'
-import { ConvictionBar } from '../ConvictionVisuals'
-import ProposalCreator from './ProposalCreator'
 import ProposalFooter from './ProposalFooter'
+import ProposalHeader from './ProposalHeader'
+import ProposalSupport from './ProposalSupport'
 
 import { useAppState } from '../../providers/AppState'
 
 import { ProposalTypes } from '../../types'
 import honeySvg from '../../assets/honey.svg'
 
-export default function ProposalCard({ proposal }) {
+function ProposalCard({ proposal }) {
   const theme = useTheme()
   const history = useHistory()
   const { requestToken } = useAppState()
@@ -29,11 +29,12 @@ export default function ProposalCard({ proposal }) {
         margin-bottom: ${2 * GU}px;
         padding: ${3 * GU}px;
         border-radius: ${2 * GU}px;
-        cursor: pointer;
       `}
-      onClick={handleSelectProposal}
     >
-      <ProposalCreator proposal={proposal} />
+      <ProposalHeader
+        proposal={proposal}
+        onSelectProposal={handleSelectProposal}
+      />
       <div
         css={`
           margin-bottom: ${3 * GU}px;
@@ -80,24 +81,11 @@ export default function ProposalCard({ proposal }) {
           Current{' '}
           {proposal.type !== ProposalTypes.Decision ? 'support' : 'votes'}
         </div>
-        {proposal.type !== ProposalTypes.Decision ? (
-          <ProposalInfo proposal={proposal} requestToken={requestToken} />
-        ) : (
-          <div>Decision support</div> // TODO: Add current votes
-        )}
+        <ProposalSupport proposal={proposal} />
       </div>
       <ProposalFooter proposal={proposal} />
     </div>
   )
 }
 
-const ProposalInfo = ({ proposal, requestToken }) => {
-  return (
-    <div>
-      <ConvictionBar
-        proposal={proposal}
-        withThreshold={Boolean(requestToken)}
-      />
-    </div>
-  )
-}
+export default ProposalCard

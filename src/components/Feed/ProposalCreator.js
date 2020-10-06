@@ -52,7 +52,6 @@ function ProposalCreator({ proposal }) {
     <div
       css={`
         display: flex;
-        margin-bottom: ${3 * GU}px;
       `}
     >
       <div>

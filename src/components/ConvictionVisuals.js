@@ -82,11 +82,7 @@ export function ConvictionBar({ proposal, withThreshold = true }) {
         compact
       />
       <div>
-        <span
-          css={`
-            ${textStyle('body3')}
-          `}
-        >
+        <span>
           {Math.round(stakedConviction * 100)}%{' '}
           {!signalingProposal &&
             (withThreshold ? (
