@@ -12,7 +12,7 @@ import { useAppState } from '../../providers/AppState'
 import { ProposalTypes } from '../../types'
 import honeySvg from '../../assets/honey.svg'
 
-function ProposalCard({ proposal }) {
+function ProposalCard({ proposal, onStakeToProposal, onWithdrawFromProposal }) {
   const theme = useTheme()
   const history = useHistory()
   const { requestToken } = useAppState()
@@ -83,7 +83,11 @@ function ProposalCard({ proposal }) {
         </div>
         <ProposalSupport proposal={proposal} />
       </div>
-      <ProposalFooter proposal={proposal} />
+      <ProposalFooter
+        proposal={proposal}
+        onStakeToProposal={onStakeToProposal}
+        onWithdrawFromProposal={onWithdrawFromProposal}
+      />
     </div>
   )
 }

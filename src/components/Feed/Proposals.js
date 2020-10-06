@@ -16,6 +16,8 @@ const Proposals = React.memo(
     handleSearchTextFilterChange,
     handleProposalTypeFilterChange,
     onRequestNewProposal,
+    onStakeToProposal,
+    onWithdrawFromProposal,
   }) => {
     const updateTextFilter = useCallback(
       textValue => {
@@ -42,7 +44,11 @@ const Proposals = React.memo(
           handleProposalTypeFilterChange={handleProposalTypeFilterChange}
         />
 
-        <ProposalsList proposals={filteredProposals} />
+        <ProposalsList
+          proposals={filteredProposals}
+          onStakeToProposal={onStakeToProposal}
+          onWithdrawFromProposal={onWithdrawFromProposal}
+        />
         <HeroBanner onRequestNewProposal={onRequestNewProposal} />
       </div>
     )

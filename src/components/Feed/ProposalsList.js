@@ -3,7 +3,11 @@ import { Button, textStyle } from '@1hive/1hive-ui'
 import ProposalCard from './ProposalCard'
 import { useAppState } from '../../providers/AppState'
 
-function ProposalsList({ proposals }) {
+function ProposalsList({
+  proposals,
+  onStakeToProposal,
+  onWithdrawFromProposal,
+}) {
   const { increaseProposalCount } = useAppState()
 
   const sortedProposals = useMemo(
@@ -20,7 +24,14 @@ function ProposalsList({ proposals }) {
       {sortedProposals.length ? (
         <>
           {sortedProposals.map((proposal, index) => {
-            return <ProposalCard key={index} proposal={proposal} />
+            return (
+              <ProposalCard
+                key={index}
+                proposal={proposal}
+                onStakeToProposal={onStakeToProposal}
+                onWithdrawFromProposal={onWithdrawFromProposal}
+              />
+            )
           })}
           <Button label="Load more" onClick={increaseProposalCount} />
         </>

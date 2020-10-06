@@ -15,5 +15,6 @@ export const PROPOSAL_TYPE_FUNDING = 1
 export const PROPOSAL_TYPE_SIGNALING = 2
 
 export const STAKE_PCT_BASE = bigNum(1)
+export const QUICK_STAKE_PCT = bigNum(5, 16)
 
 export const ZERO_ADDR = '0x0000000000000000000000000000000000000000'

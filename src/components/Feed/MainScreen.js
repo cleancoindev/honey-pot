@@ -68,6 +68,8 @@ const MainScreen = React.memo(
             handleSearchTextFilterChange={handleSearchTextFilterChange}
             handleProposalTypeFilterChange={handleProposalTypeFilterChange}
             onRequestNewProposal={onRequestNewProposal}
+            onStakeToProposal={onStakeToProposal}
+            onWithdrawFromProposal={onWithdrawFromProposal}
           />
         )}
       </>
