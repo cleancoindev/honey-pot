@@ -1,8 +1,11 @@
 import React, { useMemo } from 'react'
-import { textStyle } from '@1hive/1hive-ui'
+import { Button, textStyle } from '@1hive/1hive-ui'
 import ProposalCard from './ProposalCard'
+import { useAppState } from '../../providers/AppState'
 
 function ProposalsList({ proposals }) {
+  const { increaseProposalCount } = useAppState()
+
   const sortedProposals = useMemo(
     () => proposals.sort((a, b) => b.currentConviction - a.currentConviction),
     [proposals]
@@ -15,9 +18,12 @@ function ProposalsList({ proposals }) {
       `}
     >
       {sortedProposals.length ? (
-        sortedProposals.map((proposal, index) => {
-          return <ProposalCard key={index} proposal={proposal} />
-        })
+        <>
+          {sortedProposals.map((proposal, index) => {
+            return <ProposalCard key={index} proposal={proposal} />
+          })}
+          <Button label="Load more" onClick={increaseProposalCount} />
+        </>
       ) : (
         <p
           css={`

@@ -60,7 +60,7 @@ export function useOrganzation() {
   return organzation
 }
 
-export function useAppData(organization) {
+export function useAppData(organization, proposalCount) {
   const [appData, setAppData] = useState(DEFAULT_APP_DATA)
   const appName = env('APP_NAME')
 
@@ -104,7 +104,7 @@ export function useAppData(organization) {
   }, [appName, organization])
 
   const config = useConfigSubscription(appData.honeypot)
-  const proposals = useProposalsSubscription(appData.honeypot)
+  const proposals = useProposalsSubscription(appData.honeypot, proposalCount)
 
   return { ...appData, config, proposals }
 }

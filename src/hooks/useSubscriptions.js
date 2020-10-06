@@ -31,7 +31,7 @@ export function useConfigSubscription(honeypot) {
   return config
 }
 
-export function useProposalsSubscription(honeypot) {
+export function useProposalsSubscription(honeypot, first = 10) {
   const [proposals, setProposals] = useState([])
 
   const proposalsSubscription = useRef(null)
@@ -50,10 +50,13 @@ export function useProposalsSubscription(honeypot) {
       return
     }
 
-    proposalsSubscription.current = honeypot.onProposals({}, onProposalsHandler)
+    proposalsSubscription.current = honeypot.onProposals(
+      { first },
+      onProposalsHandler
+    )
 
     return () => proposalsSubscription.current.unsubscribe()
-  }, [honeypot, onProposalsHandler])
+  }, [first, honeypot, onProposalsHandler])
 
   return proposals
 }
