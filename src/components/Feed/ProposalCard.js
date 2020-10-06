@@ -2,13 +2,14 @@ import React, { useCallback } from 'react'
 import { useHistory } from 'react-router-dom'
 import { GU, textStyle, useTheme } from '@1hive/1hive-ui'
 
-import ProposalCreator from './ProposalCreator'
+import Balance from '../Balance'
 import { ConvictionBar } from '../ConvictionVisuals'
+import ProposalCreator from './ProposalCreator'
+import ProposalFooter from './ProposalFooter'
 
 import { useAppState } from '../../providers/AppState'
 
 import { ProposalTypes } from '../../types'
-import { formatTokenAmount } from '../../lib/token-utils'
 import honeySvg from '../../assets/honey.svg'
 
 export default function ProposalCard({ proposal }) {
@@ -50,18 +51,19 @@ export default function ProposalCard({ proposal }) {
             color: ${theme.contentSecondary};
           `}
         >
-          Request:{' '}
-          <img
-            src={honeySvg}
-            alt=""
-            width="24"
-            height="24"
+          <span
             css={`
-              margin: 0 ${0.5 * GU}px;
+              margin-right: ${1 * GU}px;
             `}
+          >
+            Request:
+          </span>
+          <Balance
+            amount={proposal.requestedAmount}
+            decimals={requestToken.decimals}
+            icon={honeySvg}
+            symbol={requestToken.symbol}
           />
-          {formatTokenAmount(proposal.requestedAmount, requestToken.decimals)}{' '}
-          {requestToken.symbol}
         </div>
       )}
       <div
@@ -81,21 +83,10 @@ export default function ProposalCard({ proposal }) {
         {proposal.type !== ProposalTypes.Decision ? (
           <ProposalInfo proposal={proposal} requestToken={requestToken} />
         ) : (
-          <div>Decision support</div>
+          <div>Decision support</div> // TODO: Add current votes
         )}
       </div>
-      <div
-        css={`
-          display: flex;
-          align-items: center;
-          justify-content: space-between;
-
-          color: ${theme.contentSecondary};
-        `}
-      >
-        <div>Support</div>
-        <div>Status : {proposal.status}</div>
-      </div>
+      <ProposalFooter proposal={proposal} />
     </div>
   )
 }
@@ -110,39 +101,3 @@ const ProposalInfo = ({ proposal, requestToken }) => {
     </div>
   )
 }
-
-// const IdAndTitle = ({ id, name, selectProposal }) => {
-//   const theme = useTheme()
-//   const handleOnClick = useCallback(() => {
-//     selectProposal(id)
-//   }, [id, selectProposal])
-
-//   return (
-//     <Link onClick={handleOnClick}>
-//       <span
-//         css={`
-//           color: ${theme.surfaceContentSecondary};
-//         `}
-//       >
-//         {name}
-//       </span>
-//     </Link>
-//   )
-// }
-
-// const Amount = ({
-//   requestedAmount = 0,
-//   requestToken: { symbol, decimals },
-// }) => {
-//   const tokenIcon = getTokenIconBySymbol(symbol)
-//   return (
-//     <div>
-//       <Balance
-//         amount={requestedAmount}
-//         decimals={decimals}
-//         icon={tokenIcon}
-//         symbol={symbol}
-//       />
-//     </div>
-//   )
-// }
