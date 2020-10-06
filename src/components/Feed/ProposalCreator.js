@@ -11,6 +11,8 @@ import ProposalIcon from '../ProposalIcon'
 import { convertToString } from '../../types'
 import { getProfileForAccount } from '../../lib/profile'
 import { dateFormat } from '../../utils/date-utils'
+import { addressesEqual } from '../../lib/web3-utils'
+import { ZERO_ADDR } from '../../constants'
 
 const addressCache = new Map()
 
@@ -39,6 +41,12 @@ function ProposalCreator({ proposal }) {
       cancelled = true
     }
   }, [proposal.creator])
+
+  const ProposalType = (
+    <>
+      <ProposalIcon type={proposal.type} /> {convertToString(proposal.type)}
+    </>
+  )
 
   return (
     <div
@@ -75,15 +83,22 @@ function ProposalCreator({ proposal }) {
             align-items: center;
           `}
         >
-          <strong
-            css={`
-              margin-right: ${1 * GU}px;
-            `}
-          >
-            {profile?.name ? profile.name : shortenAddress(proposal.creator)}
-          </strong>
-          created a <ProposalIcon type={proposal.type} />{' '}
-          {convertToString(proposal.type)}
+          {addressesEqual(proposal.creator, ZERO_ADDR) ? (
+            ProposalType
+          ) : (
+            <>
+              <strong
+                css={`
+                  margin-right: ${1 * GU}px;
+                `}
+              >
+                {profile?.name
+                  ? profile.name
+                  : shortenAddress(proposal.creator)}
+              </strong>
+              created a {ProposalType}
+            </>
+          )}
         </div>
         <div
           css={`
