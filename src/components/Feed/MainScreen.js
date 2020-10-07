@@ -1,21 +1,18 @@
 import React, { useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
 
-import Proposals from './Proposals'
-import ProposalDetail from './ProposalDetail'
+import FilterSidebar from '../FilterSidebar/FilterSidebar'
+import HeroBanner from './HeroBanner'
+import ProposalsList from './ProposalsList'
 import useFilterProposals from '../../hooks/useFilterProposals'
 
 const MainScreen = React.memo(
   ({
     isLoading,
     myStakes,
-    onCancelProposal,
-    onExecuteProposal,
     onRequestNewProposal,
     onStakeToProposal,
     onWithdrawFromProposal,
     proposals,
-    selectedProposal,
   }) => {
     const {
       filteredProposals,
@@ -29,50 +26,49 @@ const MainScreen = React.memo(
       handleProposalTypeFilterChange,
     } = useFilterProposals(proposals, myStakes)
 
-    const history = useHistory()
-    const handleBack = useCallback(() => {
-      history.goBack()
-    }, [history])
+    const handleExecutionStatusFilterChange = useCallback(
+      tabIndex => {
+        handleProposalExecutionFilterChange(tabIndex)
+        handleProposalSupportFilterChange(-1)
+      },
+      [handleProposalExecutionFilterChange, handleProposalSupportFilterChange]
+    )
 
-    const handleTabChange = tabIndex => {
-      handleProposalExecutionFilterChange(tabIndex)
-      handleProposalSupportFilterChange(-1)
-    }
+    const updateTextFilter = useCallback(
+      textValue => {
+        handleSearchTextFilterChange(textValue)
+      },
+      [handleSearchTextFilterChange]
+    )
 
     if (isLoading) {
       return null
     }
 
     return (
-      <>
-        {selectedProposal ? (
-          <ProposalDetail
-            onBack={handleBack}
-            onExecuteProposal={onExecuteProposal}
-            onCancelProposal={onCancelProposal}
-            onStakeToProposal={onStakeToProposal}
-            onWithdrawFromProposal={onWithdrawFromProposal}
-            proposal={selectedProposal}
-          />
-        ) : (
-          <Proposals
-            filteredProposals={filteredProposals}
-            proposalExecutionStatusFilter={proposalExecutionStatusFilter}
-            proposalSupportStatusFilter={proposalSupportStatusFilter}
-            proposalTextFilter={proposalTextFilter}
-            proposalTypeFilter={proposalTypeFilter}
-            handleProposalSupportFilterChange={
-              handleProposalSupportFilterChange
-            }
-            handleExecutionStatusFilterChange={handleTabChange}
-            handleSearchTextFilterChange={handleSearchTextFilterChange}
-            handleProposalTypeFilterChange={handleProposalTypeFilterChange}
-            onRequestNewProposal={onRequestNewProposal}
-            onStakeToProposal={onStakeToProposal}
-            onWithdrawFromProposal={onWithdrawFromProposal}
-          />
-        )}
-      </>
+      <div
+        css={`
+          display: flex;
+        `}
+      >
+        <FilterSidebar
+          proposalsSize={filteredProposals.length}
+          proposalExecutionStatusFilter={proposalExecutionStatusFilter}
+          proposalStatusFilter={proposalSupportStatusFilter}
+          proposalTextFilter={proposalTextFilter}
+          proposalTypeFilter={proposalTypeFilter}
+          handleExecutionStatusFilterChange={handleExecutionStatusFilterChange}
+          handleProposalStatusFilterChange={handleProposalSupportFilterChange}
+          handleTextFilterChange={updateTextFilter}
+          handleProposalTypeFilterChange={handleProposalTypeFilterChange}
+        />
+        <ProposalsList
+          proposals={filteredProposals}
+          onStakeToProposal={onStakeToProposal}
+          onWithdrawFromProposal={onWithdrawFromProposal}
+        />
+        <HeroBanner onRequestNewProposal={onRequestNewProposal} />
+      </div>
     )
   }
 )

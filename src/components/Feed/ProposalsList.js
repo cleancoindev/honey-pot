@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import { Button, textStyle } from '@1hive/1hive-ui'
 import ProposalCard from './ProposalCard'
 import { useAppState } from '../../providers/AppState'
@@ -10,20 +10,15 @@ function ProposalsList({
 }) {
   const { increaseProposalCount } = useAppState()
 
-  const sortedProposals = useMemo(
-    () => proposals.sort((a, b) => b.currentConviction - a.currentConviction),
-    [proposals]
-  )
-
   return (
     <div
       css={`
         flex-basis: 50%;
       `}
     >
-      {sortedProposals.length ? (
+      {proposals.length ? (
         <>
-          {sortedProposals.map((proposal, index) => {
+          {proposals.map((proposal, index) => {
             return (
               <ProposalCard
                 key={index}

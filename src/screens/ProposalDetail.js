@@ -14,28 +14,31 @@ import {
   useTheme,
 } from '@1hive/1hive-ui'
 
-import Balance from '../Balance'
-import { ConvictionCountdown, ConvictionBar } from '../ConvictionVisuals'
-import IdentityBadge from '../IdentityBadge'
-import ProposalActions from './ProposalActions'
-import SupportersDistribution from '../SupportersDistribution'
-import SupportProposalPanel from '../panels/SupportProposalPanel'
+import Balance from '../components/Balance'
+import {
+  ConvictionCountdown,
+  ConvictionBar,
+} from '../components/ConvictionVisuals'
+import IdentityBadge from '../components/IdentityBadge'
+import ProposalActions from '../components/Feed/ProposalActions'
+import SupportersDistribution from '../components/SupportersDistribution'
+import SupportProposalPanel from '../components/panels/SupportProposalPanel'
 
-import { useAppState } from '../../providers/AppState'
-import usePanelState from '../../hooks/usePanelState'
-import { useWallet } from '../../providers/Wallet'
+import { useAppState } from '../providers/AppState'
+import usePanelState from '../hooks/usePanelState'
+import { useWallet } from '../providers/Wallet'
 
-import BigNumber from '../../lib/bigNumber'
-import { getTokenIconBySymbol, formatTokenAmount } from '../../lib/token-utils'
+import BigNumber from '../lib/bigNumber'
+import { getTokenIconBySymbol, formatTokenAmount } from '../lib/token-utils'
 import {
   addressesEqualNoSum as addressesEqual,
   soliditySha3,
-} from '../../lib/web3-utils'
+} from '../lib/web3-utils'
 import {
   PROPOSAL_STATUS_ACTIVE_STRING,
   PROPOSAL_STATUS_CANCELLED_STRING,
   ZERO_ADDR,
-} from '../../constants'
+} from '../constants'
 import signalingBadge from '../../assets/signalingBadge.svg'
 
 const CANCEL_ROLE_HASH = soliditySha3('CANCEL_PROPOSAL_ROLE')
