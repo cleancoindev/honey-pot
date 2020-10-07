@@ -4,7 +4,7 @@ import { Box, GU, LoadingRing, textStyle, useTheme } from '@1hive/1hive-ui'
 import { useAppState } from '../providers/AppState'
 
 import { formatTokenAmount, getTokenIconBySymbol } from '../lib/token-utils'
-import { useAccountTokens } from '../hooks/useAccountTokens'
+import useAccountTokens from '../hooks/useAccountTokens'
 
 function Wallet({ account }) {
   const theme = useTheme()

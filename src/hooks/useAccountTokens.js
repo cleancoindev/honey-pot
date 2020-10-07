@@ -3,7 +3,7 @@ import { useAccountStakes } from './useStakes'
 import { useAppState } from '../providers/AppState'
 import BigNumber from '../lib/bigNumber'
 
-export function useAccountTokens(account) {
+export default function useAccountTokens(account) {
   const myStakes = useAccountStakes(account)
   const { accountBalance } = useAppState()
 

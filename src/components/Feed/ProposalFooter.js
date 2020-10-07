@@ -3,8 +3,10 @@ import { GU, textStyle, useTheme } from '@1hive/1hive-ui'
 import { ThumbsDownIcon, ThumbsUpIcon } from '../Icons'
 
 import { useAppState } from '../../providers/AppState'
+import useAccountTokens from '../../hooks/useAccountTokens'
 import { useWallet } from '../../providers/Wallet'
 
+import BigNumber from '../../lib/bigNumber'
 import { isEntitySupporting } from '../../lib/conviction'
 import { QUICK_STAKE_PCT, STAKE_PCT_BASE } from '../../constants'
 
@@ -14,7 +16,10 @@ function ProposalFooter({
   onWithdrawFromProposal,
 }) {
   const theme = useTheme()
+  const { account } = useWallet()
   const { accountBalance } = useAppState()
+
+  const { inactiveTokens } = useAccountTokens(account)
 
   const supportersCount = useMemo(
     () => proposal.stakes.filter(({ amount }) => amount.gt(0)).length,
@@ -22,12 +27,17 @@ function ProposalFooter({
   )
 
   const handleThumbsUp = useCallback(() => {
-    // Staking 5% of account's balance
-    const amount = accountBalance.times(QUICK_STAKE_PCT).div(STAKE_PCT_BASE)
+    // Staking the minimum between account's inactive tokens and 5% of account's balance
+    const amount = BigNumber.min(
+      inactiveTokens,
+      accountBalance.times(QUICK_STAKE_PCT).div(STAKE_PCT_BASE)
+    )
+
     onStakeToProposal(proposal.id, amount.toFixed(0))
-  }, [accountBalance, proposal.id, onStakeToProposal])
+  }, [accountBalance, inactiveTokens, onStakeToProposal, proposal.id])
 
   const handleThumbsDown = useCallback(() => {
+    // Withdraw all the staked tokens on the proposal
     onWithdrawFromProposal(proposal.id)
   }, [proposal.id, onWithdrawFromProposal])
 
@@ -50,6 +60,7 @@ function ProposalFooter({
           `}
         >
           <QuickActions
+            canSupport={inactiveTokens.gt(0)}
             proposal={proposal}
             onThumbsUp={handleThumbsUp}
             onThumbsDown={handleThumbsDown}
@@ -64,8 +75,10 @@ function ProposalFooter({
   )
 }
 
-function QuickActions({ proposal, onThumbsUp, onThumbsDown }) {
+// TODO: Add logic for dandelion votes
+function QuickActions({ canSupport, proposal, onThumbsUp, onThumbsDown }) {
   const { account } = useWallet()
+
   if (!account) {
     return null
   }
@@ -79,29 +92,27 @@ function QuickActions({ proposal, onThumbsUp, onThumbsDown }) {
         align-items: center;
       `}
     >
-      {!isSupporting ? (
-        <div
-          onClick={onThumbsUp}
-          css={`
-            margin-right: ${1 * GU}px;
-            cursor: pointer;
-            display: flex;
-          `}
-        >
-          <ThumbsUpIcon />
-        </div>
-      ) : (
-        <div
-          onClick={onThumbsDown}
-          css={`
-            margin-right: ${1.5 * GU}px;
-            cursor: pointer;
-            display: flex;
-          `}
-        >
-          <ThumbsDownIcon />
-        </div>
-      )}
+      <div
+        onClick={canSupport ? onThumbsUp : null}
+        css={`
+          display: flex;
+          margin-right: ${1 * GU}px;
+          ${canSupport && 'cursor: pointer'};
+        `}
+      >
+        <ThumbsUpIcon disabled={!canSupport} />
+      </div>
+
+      <div
+        onClick={isSupporting ? onThumbsDown : null}
+        css={`
+          display: flex;
+          margin-right: ${1.5 * GU}px;
+          ${isSupporting && 'cursor: pointer'};
+        `}
+      >
+        <ThumbsDownIcon disabled={!isSupporting} />
+      </div>
     </div>
   )
 }

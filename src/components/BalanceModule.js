@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom'
 import { textStyle, useTheme } from '@1hive/1hive-ui'
 
 import HeaderModule from './Header/HeaderModule'
-import { useAccountTokens } from '../hooks/useAccountTokens'
+import useAccountTokens from '../hooks/useAccountTokens'
 import { useAppState } from '../providers/AppState'
 import { useWallet } from '../providers/Wallet'
 
