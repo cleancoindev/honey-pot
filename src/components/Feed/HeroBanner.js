@@ -29,8 +29,7 @@ function HeroBanner({ onRequestNewProposal }) {
         css={`
           background: url(${banner}) no-repeat;
 
-          height: 100%;
-
+          height: 520px;
           width: 327px;
           padding: ${8 * GU}px;
           text-align: center;

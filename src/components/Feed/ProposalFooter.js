@@ -1,14 +1,12 @@
 import React, { useCallback, useMemo } from 'react'
 import { GU, textStyle, useTheme } from '@1hive/1hive-ui'
+import { ThumbsDownIcon, ThumbsUpIcon } from '../Icons'
 
 import { useAppState } from '../../providers/AppState'
 import { useWallet } from '../../providers/Wallet'
 
 import { isEntitySupporting } from '../../lib/conviction'
 import { QUICK_STAKE_PCT, STAKE_PCT_BASE } from '../../constants'
-
-import thumbsUpSvg from '../../assets/thumbs-up.svg'
-import thumbsDownSvg from '../../assets/thumbs-down.svg'
 
 function ProposalFooter({
   proposal,
@@ -56,7 +54,9 @@ function ProposalFooter({
             onThumbsUp={handleThumbsUp}
             onThumbsDown={handleThumbsDown}
           />
-          <div>{supportersCount} Supporters</div>
+          <div>
+            {supportersCount} Supporter{supportersCount === 1 ? '' : 's'}
+          </div>
         </div>
         <div>Status : {proposal.status}</div>
       </div>
@@ -80,29 +80,27 @@ function QuickActions({ proposal, onThumbsUp, onThumbsDown }) {
       `}
     >
       {!isSupporting ? (
-        <img
-          src={thumbsUpSvg}
-          alt=""
-          height="28"
-          width="28"
+        <div
           onClick={onThumbsUp}
           css={`
             margin-right: ${1 * GU}px;
             cursor: pointer;
+            display: flex;
           `}
-        />
+        >
+          <ThumbsUpIcon />
+        </div>
       ) : (
-        <img
-          src={thumbsDownSvg}
-          alt=""
-          height="28"
-          width="28"
+        <div
           onClick={onThumbsDown}
           css={`
             margin-right: ${1.5 * GU}px;
             cursor: pointer;
+            display: flex;
           `}
-        />
+        >
+          <ThumbsDownIcon />
+        </div>
       )}
     </div>
   )
