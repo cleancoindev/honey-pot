@@ -1,32 +1,16 @@
-import React, { useMemo } from 'react'
+import React from 'react'
 import styled from 'styled-components'
 import { Box, GU, LoadingRing, textStyle, useTheme } from '@1hive/1hive-ui'
 import { useAppState } from '../providers/AppState'
-import { useTokenBalances } from '../hooks/useOrgHooks'
 
-import BigNumber from '../lib/bigNumber'
 import { formatTokenAmount, getTokenIconBySymbol } from '../lib/token-utils'
+import { useAccountTokens } from '../hooks/useAccountTokens'
 
-function Wallet({ account, myStakes }) {
+function Wallet({ account }) {
   const theme = useTheme()
   const { stakeToken } = useAppState()
-  const { balance: accountBalance } = useTokenBalances(account, stakeToken)
-
-  const myActiveTokens = useMemo(() => {
-    if (!myStakes) {
-      return new BigNumber('0')
-    }
-    return myStakes.reduce((accumulator, stake) => {
-      return accumulator.plus(stake.amount)
-    }, new BigNumber('0'))
-  }, [myStakes])
-
-  const inactiveTokens = useMemo(() => {
-    if (!accountBalance.gte(0) || !myActiveTokens) {
-      return new BigNumber('0')
-    }
-    return accountBalance.minus(myActiveTokens)
-  }, [accountBalance, myActiveTokens])
+  const { accountBalance } = useAppState()
+  const { inactiveTokens } = useAccountTokens(account)
 
   return (
     <Box padding={0}>
