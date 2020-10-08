@@ -1,83 +1,137 @@
-import React, { useState, useRef, useCallback } from 'react'
-import { DropDown, GU } from '@1hive/1hive-ui'
+import React from 'react'
 import PropTypes from 'prop-types'
-
-import TextFilter from './TextFilter'
-import DropdownFilter from './DropdownFilter'
+import styled from 'styled-components'
+import { Button, DropDown, GU, Tag, textStyle, useTheme } from '@1hive/1hive-ui'
+import ListFilter from './ListFilter'
 
 const FilterSidebar = React.memo(
   ({
     proposalsSize = 0,
-    proposalExecutionStatusFilter,
     proposalStatusFilter,
-    proposalTextFilter,
+    proposalSupportFilter,
     proposalTypeFilter,
-    handleExecutionStatusFilterChange,
-    handleProposalStatusFilterChange,
-    handleTextFilterChange,
-    handleProposalTypeFilterChange,
+    onClearFilters,
+    onStatusFilterChange,
+    onSupportFilterChange,
+    onTypeFilterChange,
   }) => {
-    const [textFieldVisible, setTextFieldVisible] = useState(false)
-    const textFilterOpener = useRef(null)
-
-    const handlerTextFilterClick = useCallback(() => {
-      setTextFieldVisible(true)
-    }, [setTextFieldVisible])
-
-    const statusFilterDisabled = proposalExecutionStatusFilter === 1
+    const theme = useTheme()
+    const supportFilterDisabled = proposalStatusFilter === 1
 
     return (
       <div
         css={`
           flex-basis: 25%;
+          margin-right: ${8 * GU}px;
         `}
       >
-        <DropDown
-          header="Type"
-          placeholder="All"
-          selected={proposalTypeFilter}
-          onChange={handleProposalTypeFilterChange}
-          items={['All', 'Funding', 'Signaling']}
-        />
-        <DropDown
-          header="Status"
-          placeholder="All"
-          selected={proposalExecutionStatusFilter}
-          onChange={handleExecutionStatusFilterChange}
-          items={['All', 'Open', 'Closed', 'Removed']}
+        <div
           css={`
-            margin-left: ${1.5 * GU}px;
+            margin-bottom: ${4 * GU}px;
+            padding-bottom: ${3 * GU}px;
+            border-bottom: 1px solid ${theme.border};
           `}
-        />
-        {!statusFilterDisabled && (
-          <DropdownFilter
-            proposalsSize={proposalsSize}
-            proposalStatusFilter={proposalStatusFilter}
-            handleProposalStatusFilterChange={handleProposalStatusFilterChange}
+        >
+          <div
+            css={`
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+
+              margin-bottom: ${2 * GU}px;
+            `}
+          >
+            <div
+              css={`
+                ${textStyle('label2')};
+              `}
+            >
+              Filters
+            </div>
+            <Button onClick={onClearFilters} label="Clear" size="mini" />
+          </div>
+          <ListFilter
+            items={['All', 'Suggestion', 'Proposal', 'Decision']}
+            selected={proposalTypeFilter}
+            onChange={onTypeFilterChange}
           />
+        </div>
+        <div
+          css={`
+            margin-bottom: ${3 * GU}px;
+          `}
+        >
+          <label
+            css={`
+              display: block;
+              ${textStyle('label2')};
+              margin-bottom: ${1 * GU}px;
+            `}
+          >
+            Status
+          </label>
+          <DropDown
+            header="Status"
+            items={['All', 'Open', 'Closed', 'Removed']}
+            onChange={onStatusFilterChange}
+            placeholder="All"
+            selected={proposalStatusFilter}
+            wide
+          />
+        </div>
+        {!supportFilterDisabled && (
+          <div>
+            <label
+              css={`
+                display: block;
+                ${textStyle('label2')};
+                margin-bottom: ${1 * GU}px;
+              `}
+            >
+              Support
+            </label>
+            <DropDown
+              header="Support"
+              items={[
+                <div>
+                  All
+                  {proposalsSize !== -1 && (
+                    <SizeTagWrapper theme={theme.info}>
+                      <Tag limitDigits={4} label={proposalsSize} size="small" />
+                    </SizeTagWrapper>
+                  )}
+                </div>,
+                'Supported',
+                'Not Supported',
+              ]}
+              onChange={onSupportFilterChange}
+              placeholder="All"
+              selected={proposalSupportFilter}
+              wide
+            />
+          </div>
         )}
-        <TextFilter
-          textFilter={proposalTextFilter}
-          updateTextFilter={handleTextFilterChange}
-          placeholder="Search by name"
-          visible={textFieldVisible}
-          setVisible={setTextFieldVisible}
-          openerRef={textFilterOpener}
-          onClick={handlerTextFilterClick}
-        />
       </div>
     )
   }
 )
 
+const SizeTagWrapper = styled.span`
+  margin-left: ${1.5 * GU}px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: ${({ theme }) => theme};
+`
+
 FilterSidebar.propTypes = {
   proposalsSize: PropTypes.number,
-  proposalExecutionStatusFilter: PropTypes.number.isRequired,
   proposalStatusFilter: PropTypes.number.isRequired,
-  proposalTextFilter: PropTypes.string.isRequired,
-  handleExecutionStatusFilterChange: PropTypes.func.isRequired,
-  handleProposalStatusFilterChange: PropTypes.func.isRequired,
-  handleTextFilterChange: PropTypes.func.isRequired,
+  proposalSupportFilter: PropTypes.number.isRequired,
+  proposalTypeFilter: PropTypes.number.isRequired,
+  onStatusFilterChange: PropTypes.func.isRequired,
+  onSupportFilterChange: PropTypes.func.isRequired,
+  onTypeFilterChange: PropTypes.func.isRequired,
 }
 
 export default FilterSidebar
