@@ -18,7 +18,7 @@ function ProposalCard({ proposal, onStakeToProposal, onWithdrawFromProposal }) {
   const { requestToken } = useAppState()
 
   const handleSelectProposal = useCallback(() => {
-    history.push(`${history.location.pathname}/proposal/${proposal.number}`)
+    history.push(`/proposal/${proposal.number}`)
   }, [history, proposal.number])
 
   return (
