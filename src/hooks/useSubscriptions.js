@@ -4,6 +4,7 @@ import {
   transformProposalData,
   transformSupporterData,
 } from '../lib/data-utils'
+import { useAppState } from '../providers/AppState'
 
 export function useConfigSubscription(honeypot) {
   const [config, setConfig] = useState(null)
@@ -59,6 +60,38 @@ export function useProposalsSubscription(honeypot, first = 10) {
   }, [first, honeypot, onProposalsHandler])
 
   return proposals
+}
+
+// TODO: Handle errors
+export function useProposalSubscription(proposalId, appAddress) {
+  const { honeypot } = useAppState()
+  const [proposal, setProposal] = useState(null)
+
+  const proposalSubscription = useRef(null)
+
+  const onProposalHandler = useCallback((err, proposal) => {
+    if (err || !proposal) {
+      return
+    }
+
+    const transformedProposal = transformProposalData(proposal)
+    setProposal(transformedProposal)
+  }, [])
+
+  useEffect(() => {
+    if (!honeypot || !proposalId || !appAddress) {
+      return
+    }
+
+    proposalSubscription.current = honeypot.onProposal(
+      { number: proposalId, appAddress },
+      onProposalHandler
+    )
+
+    return () => proposalSubscription.current.unsubscribe()
+  }, [appAddress, honeypot, onProposalHandler, proposalId])
+
+  return proposal
 }
 
 export function useSupporterSubscription(honeypot, account) {
