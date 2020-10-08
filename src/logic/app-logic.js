@@ -10,8 +10,8 @@ export default function useAppLogic() {
   const wallet = useWallet()
   const { isLoading, totalStaked } = useAppState()
 
-  const [proposals, blockHasLoaded] = useProposals()
   const proposalPanel = usePanelState()
+  const [proposals, blockHasLoaded] = useProposals()
   const myStakes = useAccountStakes(wallet.account)
 
   const actions = useActions(proposalPanel.requestClose)

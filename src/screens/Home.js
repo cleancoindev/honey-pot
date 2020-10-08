@@ -6,7 +6,6 @@ import MainScreen from '../components/Feed/MainScreen'
 import Loader from '../components/Loader'
 
 import useAppLogic from '../logic/app-logic'
-import useSelectedProposal from '../hooks/useSelectedProposal'
 
 const Home = React.memo(function Home() {
   const {
@@ -16,8 +15,6 @@ const Home = React.memo(function Home() {
     proposals,
     proposalPanel,
   } = useAppLogic()
-
-  const selectedProposal = useSelectedProposal(proposals)
 
   return (
     <div
@@ -36,7 +33,6 @@ const Home = React.memo(function Home() {
         onStakeToProposal={actions.stakeToProposal}
         onWithdrawFromProposal={actions.withdrawFromProposal}
         proposals={proposals}
-        selectedProposal={selectedProposal}
       />
 
       <SidePanel

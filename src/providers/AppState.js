@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useContext } from 'react'
 import PropTypes from 'prop-types'
 
 import {
@@ -12,21 +12,10 @@ import { useWallet } from './Wallet'
 
 const AppStateContext = React.createContext()
 
-const PROPOSAL_COUNT_STEP = 5
-
 function AppStateProvider({ children }) {
-  const [proposalCount, setProposalCount] = useState(10)
-
   const { account } = useWallet()
   const organization = useOrganzation()
-  const { config, installedApps, ...appData } = useAppData(
-    organization,
-    proposalCount
-  )
-
-  const increaseProposalCount = useCallback(() => {
-    setProposalCount(count => count + PROPOSAL_COUNT_STEP)
-  }, [])
+  const { config, installedApps, ...appData } = useAppData(organization)
 
   const { requestToken, stakeToken, totalStaked } = config?.conviction || {}
 
@@ -44,7 +33,6 @@ function AppStateProvider({ children }) {
         accountBalance: balance,
         config,
         effectiveSupply,
-        increaseProposalCount,
         installedApps,
         isLoading: appLoading,
         requestToken,

@@ -14,33 +14,6 @@ const MainScreen = React.memo(
     onWithdrawFromProposal,
     proposals,
   }) => {
-    const {
-      filteredProposals,
-      proposalExecutionStatusFilter,
-      proposalSupportStatusFilter,
-      proposalTextFilter,
-      proposalTypeFilter,
-      handleProposalSupportFilterChange,
-      handleProposalExecutionFilterChange,
-      handleSearchTextFilterChange,
-      handleProposalTypeFilterChange,
-    } = useFilterProposals(proposals, myStakes)
-
-    const handleExecutionStatusFilterChange = useCallback(
-      tabIndex => {
-        handleProposalExecutionFilterChange(tabIndex)
-        handleProposalSupportFilterChange(-1)
-      },
-      [handleProposalExecutionFilterChange, handleProposalSupportFilterChange]
-    )
-
-    const updateTextFilter = useCallback(
-      textValue => {
-        handleSearchTextFilterChange(textValue)
-      },
-      [handleSearchTextFilterChange]
-    )
-
     if (isLoading) {
       return null
     }

@@ -2,6 +2,7 @@ import { useMemo } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useAppState } from '../providers/AppState'
 
+// TODO: Remove?
 const PROPOSAL_ID_PATH_RE = /\/proposal\/([0-9]+)\/?$/
 const NO_PROPOSAL_ID = '-1'
 

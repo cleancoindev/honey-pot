@@ -3,10 +3,7 @@ import { useEffect, useRef, useState } from 'react'
 import connectHoneypot from '@1hive/connect-honey-pot'
 import { connect } from '@aragon/connect'
 import { useContractReadOnly } from './useContract'
-import {
-  useConfigSubscription,
-  useProposalsSubscription,
-} from './useSubscriptions'
+import { useConfigSubscription } from './useSubscriptions'
 import { useWallet } from '../providers/Wallet'
 
 // utils
@@ -60,7 +57,7 @@ export function useOrganzation() {
   return organzation
 }
 
-export function useAppData(organization, proposalCount) {
+export function useAppData(organization) {
   const [appData, setAppData] = useState(DEFAULT_APP_DATA)
   const appName = env('APP_NAME')
 
@@ -104,9 +101,8 @@ export function useAppData(organization, proposalCount) {
   }, [appName, organization])
 
   const config = useConfigSubscription(appData.honeypot)
-  const proposals = useProposalsSubscription(appData.honeypot, proposalCount)
 
-  return { ...appData, config, proposals }
+  return { ...appData, config }
 }
 
 export function useVaultBalance(installedApps, token, timeout = 1000) {

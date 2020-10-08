@@ -10,23 +10,21 @@ import {
   getMinNeededStake,
   getRemainingTimeToPass,
 } from '../lib/conviction'
-import { useWallet } from '../providers/Wallet'
 import { useAppState } from '../providers/AppState'
-import { useProposalSubscription } from './useSubscriptions'
+import {
+  useProposalSubscription,
+  useProposalsSubscription,
+} from './useSubscriptions'
+import { useWallet } from '../providers/Wallet'
 
 const TIME_UNIT = (60 * 60 * 24) / 15
 
 export function useProposals() {
   const { account } = useWallet()
-  const {
-    config,
-    isLoading,
-    proposals = [],
-    vaultBalance,
-    effectiveSupply,
-  } = useAppState()
+  const { config, isLoading, vaultBalance, effectiveSupply } = useAppState()
 
   const latestBlock = useLatestBlock()
+  const proposals = useProposalsSubscription()
 
   const proposalsWithData = useMemo(() => {
     if (isLoading) {

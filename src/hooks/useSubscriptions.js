@@ -32,7 +32,8 @@ export function useConfigSubscription(honeypot) {
   return config
 }
 
-export function useProposalsSubscription(honeypot, first = 10) {
+export function useProposalsSubscription(first = 10) {
+  const { honeypot } = useAppState()
   const [proposals, setProposals] = useState([])
 
   const proposalsSubscription = useRef(null)
