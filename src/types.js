@@ -16,10 +16,21 @@ const stringMapping = {
   [ProposalTypes.Suggestion]: 'Suggestion',
 }
 
+// Maps to typeInt number from subgraph, useful for queries
+const intMapping = {
+  [ProposalTypes.Decision]: 2,
+  [ProposalTypes.Proposal]: 1,
+  [ProposalTypes.Suggestion]: 0,
+}
+
 export function convertFromString(str) {
   return symbolMapping[str]
 }
 
 export function convertToString(symbol) {
   return stringMapping[symbol]
+}
+
+export function convertToInt(symbol) {
+  return intMapping[symbol]
 }
