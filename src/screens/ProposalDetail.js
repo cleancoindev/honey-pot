@@ -23,7 +23,7 @@ import {
 } from '../components/ConvictionVisuals'
 import IdentityBadge from '../components/IdentityBadge'
 import Loader from '../components/Loader'
-import ProposalActions from '../components/Feed/ProposalActions'
+import ProposalActions from '../components/ProposalDetail/ProposalActions'
 import SupportersDistribution from '../components/SupportersDistribution'
 import SupportProposalPanel from '../components/panels/SupportProposalPanel'
 
