@@ -12,6 +12,7 @@ import {
 } from '../lib/conviction'
 import { useWallet } from '../providers/Wallet'
 import { useAppState } from '../providers/AppState'
+import { useProposalSubscription } from './useSubscriptions'
 
 const TIME_UNIT = (60 * 60 * 24) / 15
 
@@ -25,8 +26,6 @@ export function useProposals() {
     effectiveSupply,
   } = useAppState()
 
-  const { alpha, maxRatio, totalStaked, weight } = config?.conviction || {}
-
   const latestBlock = useLatestBlock()
 
   const proposalsWithData = useMemo(() => {
@@ -34,97 +33,138 @@ export function useProposals() {
       return proposals
     }
 
-    return proposals.map(proposal => {
-      let threshold = null
-      let neededConviction = null
-      let minTokensNeeded = null
-      let neededTokens = null
-      let remainingTimeToPass = null
-
-      const maxConviction = getMaxConviction(
-        effectiveSupply || new BigNumber('0'),
-        alpha
-      )
-      const currentConviction = getCurrentConviction(
-        proposal.stakesHistory,
-        latestBlock.number,
-        alpha
-      )
-      const userConviction = getCurrentConvictionByEntity(
-        proposal.stakesHistory,
+    return proposals.map(proposal =>
+      processProposal(
+        proposal,
+        latestBlock,
+        effectiveSupply,
+        vaultBalance,
         account,
-        latestBlock.number,
-        alpha
+        config?.conviction
       )
-
-      const userStakedConviction = userConviction.div(maxConviction)
-
-      const stakedConviction = currentConviction.div(maxConviction)
-      const futureConviction = getMaxConviction(totalStaked, alpha)
-      const futureStakedConviction = futureConviction.div(maxConviction)
-      const convictionTrend = getConvictionTrend(
-        proposal.stakesHistory,
-        maxConviction,
-        latestBlock.number,
-        alpha,
-        TIME_UNIT
-      )
-
-      // Funding proposal needed values
-      if (proposal.requestedAmount.gt(0)) {
-        threshold = calculateThreshold(
-          proposal.requestedAmount,
-          vaultBalance || new BigNumber('0'),
-          effectiveSupply || new BigNumber('0'),
-          alpha,
-          maxRatio,
-          weight
-        )
-
-        neededConviction = threshold?.div(maxConviction)
-
-        minTokensNeeded = getMinNeededStake(threshold, alpha)
-
-        neededTokens = minTokensNeeded.minus(totalStaked)
-
-        remainingTimeToPass = getRemainingTimeToPass(
-          threshold,
-          currentConviction,
-          totalStaked,
-          alpha
-        )
-      }
-
-      return {
-        ...proposal,
-        currentConviction,
-        userConviction,
-        userStakedConviction,
-        stakedConviction,
-        futureConviction,
-        futureStakedConviction,
-        neededConviction,
-        maxConviction,
-        threshold,
-        minTokensNeeded,
-        neededTokens,
-        remainingTimeToPass,
-        convictionTrend,
-        totalStaked,
-      }
-    })
+    )
   }, [
     account,
-    alpha,
+    config,
     effectiveSupply,
     isLoading,
     latestBlock,
-    maxRatio,
     proposals,
-    totalStaked,
     vaultBalance,
-    weight,
   ])
 
   return [proposalsWithData, latestBlock.number !== 0]
+}
+
+export function useProposal(proposalId, appAddress) {
+  const { account } = useWallet()
+  const proposal = useProposalSubscription(proposalId, appAddress)
+  const { config, isLoading, vaultBalance, effectiveSupply } = useAppState()
+
+  const latestBlock = useLatestBlock()
+  const blockHasLoaded = latestBlock.number !== 0
+
+  if (isLoading || !proposal) {
+    return [null, blockHasLoaded]
+  }
+
+  const proposalWithData = processProposal(
+    proposal,
+    latestBlock,
+    effectiveSupply,
+    vaultBalance,
+    account,
+    config?.conviction
+  )
+
+  return [proposalWithData, blockHasLoaded]
+}
+
+function processProposal(
+  proposal,
+  latestBlock,
+  effectiveSupply,
+  vaultBalance,
+  account,
+  config
+) {
+  const { alpha, maxRatio, totalStaked, weight } = config || {}
+
+  let threshold = null
+  let neededConviction = null
+  let minTokensNeeded = null
+  let neededTokens = null
+  let remainingTimeToPass = null
+
+  const maxConviction = getMaxConviction(
+    effectiveSupply || new BigNumber('0'),
+    alpha
+  )
+  const currentConviction = getCurrentConviction(
+    proposal.stakesHistory,
+    latestBlock.number,
+    alpha
+  )
+  const userConviction = getCurrentConvictionByEntity(
+    proposal.stakesHistory,
+    account,
+    latestBlock.number,
+    alpha
+  )
+
+  const userStakedConviction = userConviction.div(maxConviction)
+
+  const stakedConviction = currentConviction.div(maxConviction)
+  const futureConviction = getMaxConviction(totalStaked, alpha)
+  const futureStakedConviction = futureConviction.div(maxConviction)
+  const convictionTrend = getConvictionTrend(
+    proposal.stakesHistory,
+    maxConviction,
+    latestBlock.number,
+    alpha,
+    TIME_UNIT
+  )
+
+  // Funding proposal needed values
+  if (proposal.requestedAmount.gt(0)) {
+    threshold = calculateThreshold(
+      proposal.requestedAmount,
+      vaultBalance || new BigNumber('0'),
+      effectiveSupply || new BigNumber('0'),
+      alpha,
+      maxRatio,
+      weight
+    )
+
+    neededConviction = threshold?.div(maxConviction)
+
+    minTokensNeeded = getMinNeededStake(threshold, alpha)
+
+    neededTokens = minTokensNeeded.minus(totalStaked)
+
+    remainingTimeToPass = getRemainingTimeToPass(
+      threshold,
+      currentConviction,
+      totalStaked,
+      alpha
+    )
+  }
+
+  return {
+    ...proposal,
+    currentConviction,
+    userConviction,
+    userStakedConviction,
+    stakedConviction,
+    futureConviction,
+    futureStakedConviction,
+    neededConviction,
+    maxConviction,
+    threshold,
+    minTokensNeeded,
+    neededTokens,
+    remainingTimeToPass,
+    convictionTrend,
+    totalStaked,
+  }
 }

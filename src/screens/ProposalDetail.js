@@ -1,4 +1,5 @@
 import React, { useCallback, useMemo } from 'react'
+import { useHistory } from 'react-router-dom'
 import {
   BackButton,
   Bar,
@@ -14,20 +15,23 @@ import {
   useTheme,
 } from '@1hive/1hive-ui'
 
+// Components
 import Balance from '../components/Balance'
 import {
   ConvictionCountdown,
   ConvictionBar,
 } from '../components/ConvictionVisuals'
 import IdentityBadge from '../components/IdentityBadge'
+import Loader from '../components/Loader'
 import ProposalActions from '../components/Feed/ProposalActions'
 import SupportersDistribution from '../components/SupportersDistribution'
 import SupportProposalPanel from '../components/panels/SupportProposalPanel'
 
-import { useAppState } from '../providers/AppState'
-import usePanelState from '../hooks/usePanelState'
+// Hooks
+import useProposalLogic from '../logic/proposal-logic'
 import { useWallet } from '../providers/Wallet'
 
+// utils
 import BigNumber from '../lib/bigNumber'
 import { getTokenIconBySymbol, formatTokenAmount } from '../lib/token-utils'
 import {
@@ -39,24 +43,30 @@ import {
   PROPOSAL_STATUS_CANCELLED_STRING,
   ZERO_ADDR,
 } from '../constants'
-import signalingBadge from '../../assets/signalingBadge.svg'
+import signalingBadge from '../assets/signalingBadge.svg'
 
 const CANCEL_ROLE_HASH = soliditySha3('CANCEL_PROPOSAL_ROLE')
 
-function ProposalDetail({
-  proposal,
-  onBack,
-  onCancelProposal,
-  onExecuteProposal,
-  onStakeToProposal,
-  onWithdrawFromProposal,
-}) {
-  const { layoutName } = useLayout()
+function ProposalDetail({ match }) {
+  const {
+    actions: {
+      cancelProposal,
+      executeProposal,
+      stakeToProposal,
+      withdrawFromProposal,
+    },
+    isLoading,
+    panelState,
+    permissions,
+    proposal,
+    requestToken,
+    vaultBalance,
+  } = useProposalLogic(match)
 
   const theme = useTheme()
-  const panelState = usePanelState()
+  const history = useHistory()
+  const { layoutName } = useLayout()
   const { account: connectedAccount } = useWallet()
-  const { permissions, requestToken, vaultBalance } = useAppState()
 
   const {
     id,
@@ -65,10 +75,18 @@ function ProposalDetail({
     beneficiary,
     link,
     requestedAmount,
-    stakes,
+    stakes = [],
     totalTokensStaked,
     status,
-  } = proposal
+  } = proposal || {}
+
+  const handleBack = useCallback(() => {
+    history.push('/proposals')
+  }, [history])
+
+  const handleCancelProposal = useCallback(() => {
+    cancelProposal(id)
+  }, [id, cancelProposal])
 
   const hasCancelRole = useMemo(() => {
     if (!connectedAccount) {
@@ -86,12 +104,6 @@ function ProposalDetail({
     )
   }, [connectedAccount, creator, permissions])
 
-  const handleCancelProposal = useCallback(() => {
-    onCancelProposal(id)
-  }, [id, onCancelProposal])
-
-  const signalingProposal = addressesEqual(beneficiary, ZERO_ADDR)
-
   const filteredStakes = useMemo(
     () =>
       stakes.filter(({ amount }) => {
@@ -100,10 +112,16 @@ function ProposalDetail({
     [stakes]
   )
 
+  if (isLoading || !proposal) {
+    return <Loader />
+  }
+
+  const signalingProposal = addressesEqual(beneficiary, ZERO_ADDR)
+
   return (
     <div>
       <Bar>
-        <BackButton onClick={onBack} />
+        <BackButton onClick={handleBack} />
       </Bar>
       <Split
         primary={
@@ -223,10 +241,10 @@ function ProposalDetail({
                   />
                   <ProposalActions
                     proposal={proposal}
-                    onExecuteProposal={onExecuteProposal}
+                    onExecuteProposal={executeProposal}
                     onRequestSupportProposal={panelState.requestOpen}
-                    onStakeToProposal={onStakeToProposal}
-                    onWithdrawFromProposal={onWithdrawFromProposal}
+                    onStakeToProposal={stakeToProposal}
+                    onWithdrawFromProposal={withdrawFromProposal}
                   />
                 </>
               )}
@@ -282,7 +300,7 @@ function ProposalDetail({
         <SupportProposalPanel
           id={id}
           onDone={panelState.requestClose}
-          onStakeToProposal={onStakeToProposal}
+          onStakeToProposal={stakeToProposal}
         />
       </SidePanel>
     </div>

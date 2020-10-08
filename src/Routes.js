@@ -9,6 +9,7 @@ export default function Routes() {
     <Switch>
       <Route exact path="/profile" component={Profile} />
       <Route exact path="/proposal/:id" component={ProposalDetail} />
+      <Route exact path="/vote/:id" component={ProposalDetail} />
       <Route path="/" component={Home} />
     </Switch>
   )

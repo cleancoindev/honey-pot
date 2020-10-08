@@ -5,7 +5,7 @@ import AddProposalPanel from '../components/panels/AddProposalPanel'
 import MainScreen from '../components/Feed/MainScreen'
 import Loader from '../components/Loader'
 
-import useAppLogic from '../app-logic'
+import useAppLogic from '../logic/app-logic'
 import useSelectedProposal from '../hooks/useSelectedProposal'
 
 const Home = React.memo(function Home() {

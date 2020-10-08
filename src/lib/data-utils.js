@@ -34,6 +34,7 @@ export function transformProposalData(proposal) {
     stakes: proposal.stakes.map(transformStakeData),
     stakesHistory: proposal.stakesHistory.map(transformStakeHistoryData),
     type: convertFromString(proposal.type),
+    totalTokensStaked: new BigNumber(proposal.totalTokensStaked),
   }
 }
 
