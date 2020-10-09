@@ -27,12 +27,20 @@ function MainView({ children }) {
       <ScrollView>
         <div
           css={`
-            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
           `}
         >
-          <Layout paddingBottom={3 * GU}>{children}</Layout>
+          <div
+            css={`
+              flex: 1 0 auto;
+            `}
+          >
+            <Layout paddingBottom={3 * GU}>{children}</Layout>
+          </div>
+          <Footer compact={compactMode} />
         </div>
-        <Footer compact={compactMode} />
       </ScrollView>
     </div>
   )
