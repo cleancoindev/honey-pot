@@ -54,7 +54,8 @@ export function useProposalsSubscription(filters) {
 
     proposalsSubscription.current = honeypot.onProposals(
       {
-        first: 10,
+        first: filters.proposalCount,
+        ...filters.ranking.queryArgs,
         ...filters.status.queryArgs,
         ...filters.type.queryArgs,
       },
@@ -62,7 +63,13 @@ export function useProposalsSubscription(filters) {
     )
 
     return () => proposalsSubscription.current.unsubscribe()
-  }, [filters.status, filters.type, honeypot, onProposalsHandler])
+  }, [
+    filters.ranking,
+    filters.status,
+    filters.type,
+    honeypot,
+    onProposalsHandler,
+  ])
 
   return proposals
 }

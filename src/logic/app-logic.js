@@ -8,9 +8,8 @@ export default function useAppLogic() {
   const { isLoading, totalStaked } = useAppState()
 
   const proposalPanel = usePanelState()
-  const [proposals, filters, blockHasLoaded] = useProposals()
-
   const actions = useActions(proposalPanel.requestClose)
+  const [proposals, filters, blockHasLoaded] = useProposals()
 
   return {
     actions,

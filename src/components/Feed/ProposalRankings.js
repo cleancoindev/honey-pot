@@ -1,19 +1,27 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback } from 'react'
 import { GU, textStyle, useTheme } from '@1hive/1hive-ui'
 
-import iconBestSvg from '../../assets/rankings/ranking-best.svg'
-import iconBestSelectedSvg from '../../assets/rankings/ranking-best-selected.svg'
+import iconTopSvg from '../../assets/rankings/ranking-top.svg'
+import iconTopSelectedSvg from '../../assets/rankings/ranking-top-selected.svg'
 import iconNewSvg from '../../assets/rankings/ranking-new.svg'
 import iconNewSelectedSvg from '../../assets/rankings/ranking-new-selected.svg'
 
-function ProposalRankings() {
-  const [selected, setSelected] = useState(0)
+const iconsMapping = {
+  top: {
+    icon: iconTopSvg,
+    iconSelected: iconTopSelectedSvg,
+  },
+  new: {
+    icon: iconNewSvg,
+    iconSelected: iconNewSelectedSvg,
+  },
+}
 
-  const handleSelect = useCallback(index => {
-    setSelected(index)
-  }, [])
+function getRankingIcon(key, selected) {
+  return iconsMapping[key][selected ? 'iconSelected' : 'icon']
+}
 
-  // TODO: Refactor (not very elegant implementation)
+function ProposalRankings({ items, onChange, selected }) {
   return (
     <div
       css={`
@@ -22,24 +30,27 @@ function ProposalRankings() {
         margin-bottom: ${2 * GU}px;
       `}
     >
-      <Item
-        icon={selected === 0 ? iconBestSelectedSvg : iconBestSvg}
-        label="Best"
-        onClick={() => handleSelect(0)}
-        selected={selected === 0}
-      />
-      <Item
-        icon={selected === 1 ? iconNewSelectedSvg : iconNewSvg}
-        label="New"
-        onClick={() => handleSelect(1)}
-        selected={selected === 1}
-      />
+      {items.map((item, index) => (
+        <Item
+          key={index}
+          icon={getRankingIcon(item, selected === index)}
+          index={index}
+          label={item}
+          onSelect={onChange}
+          selected={selected === index}
+        />
+      ))}
     </div>
   )
 }
 
-function Item({ icon, label, onClick, selected }) {
+function Item({ icon, index, label, onSelect, selected }) {
   const theme = useTheme()
+
+  const handleOnClick = useCallback(() => {
+    onSelect(index)
+  }, [index, onSelect])
+
   return (
     <div
       css={`
@@ -66,7 +77,7 @@ function Item({ icon, label, onClick, selected }) {
           }
         `}
       `}
-      onClick={onClick}
+      onClick={handleOnClick}
     >
       <img src={icon} height="22" width="22" alt="" />
       <div

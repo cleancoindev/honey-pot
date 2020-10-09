@@ -8,7 +8,7 @@ function ProposalHeader({ proposal, onSelectProposal }) {
       css={`
         margin-bottom: ${3 * GU}px;
         display: flex;
-        align-items: center;
+        align-items: flex-start;
         justify-content: space-between;
       `}
     >

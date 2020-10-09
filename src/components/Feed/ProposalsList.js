@@ -4,23 +4,27 @@ import EmptyResults from './EmptyResults'
 import ProposalCard from './ProposalCard'
 import ProposalRankings from './ProposalRankings'
 
-import { useAppState } from '../../providers/AppState'
-
 function ProposalsList({
   activeFilters,
   proposals,
+  onProposalCountIncrease,
+  onRankingFilterChange,
   onStakeToProposal,
   onWithdrawFromProposal,
+  rankingItems,
+  selectedRanking,
 }) {
-  const { increaseProposalCount } = useAppState()
-
   return (
     <div
       css={`
         flex-basis: 50%;
       `}
     >
-      <ProposalRankings />
+      <ProposalRankings
+        items={rankingItems}
+        onChange={onRankingFilterChange}
+        selected={selectedRanking}
+      />
       <div>
         {proposals.length ? (
           <>
@@ -34,7 +38,7 @@ function ProposalsList({
                 />
               )
             })}
-            <Button label="Load more" onClick={increaseProposalCount} />
+            <Button label="Load more" onClick={onProposalCountIncrease} />
           </>
         ) : (
           <EmptyResults

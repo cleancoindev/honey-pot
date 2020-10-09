@@ -3,20 +3,33 @@ import { useWallet } from '../providers/Wallet'
 import {
   filterArgsMapping,
   NULL_FILTER_STATE,
+  RANKING_FILTER_TOP,
+  RANKING_ITEMS,
   STATUS_FILTER_OPEN,
   STATUS_ITEMS,
   SUPPORT_ITEMS,
   TYPE_ITEMS,
 } from '../utils/filter-utils'
 
+const INITIAL_PROPOSAL_COUNT = 10
+const PROPOSAL_COUNT_STEP = 5
+
 // Status and Type filters will be used as subgraph query args.
 // Support will be filtered locally as there is not an easy way to achieve this only by querying the subgraph.
 export default function useProposalFilters() {
   const { account } = useWallet()
+  const [proposalCount, setProposalCount] = useState(INITIAL_PROPOSAL_COUNT)
+  const [rankingFilter, setRankingFilter] = useState(RANKING_FILTER_TOP)
   const [statusFilter, setStatusFilter] = useState(STATUS_FILTER_OPEN)
   const [supportFilter, setSupportFilter] = useState(NULL_FILTER_STATE)
   const [typeFilter, setTypeFilter] = useState(NULL_FILTER_STATE)
 
+  const handlePoposalCountIncrease = useCallback(index => {
+    setProposalCount(count => count + PROPOSAL_COUNT_STEP)
+  }, [])
+  const handleRankingFilterChange = useCallback(index => {
+    setRankingFilter(index)
+  }, [])
   const handleStatusFilterChange = useCallback(
     index => setStatusFilter(index || NULL_FILTER_STATE),
     []
@@ -51,19 +64,25 @@ export default function useProposalFilters() {
     () => ({
       isActive,
       onClear: handleClearFilters,
+      onProposalCountIncrease: handlePoposalCountIncrease,
+      proposalCount,
+      ranking: {
+        items: RANKING_ITEMS,
+        filter: rankingFilter,
+        onChange: handleRankingFilterChange,
+        queryArgs: getQueryArgsByFilter('ranking', rankingFilter),
+      },
       status: {
         items: STATUS_ITEMS,
         filter: statusFilter,
         onChange: handleStatusFilterChange,
         queryArgs: getQueryArgsByFilter('status', statusFilter),
       },
-
       support: {
         items: SUPPORT_ITEMS,
         filter: supportFilter,
         onChange: handleSupportFilterChange,
       },
-
       type: {
         items: TYPE_ITEMS,
         filter: typeFilter,
@@ -74,9 +93,13 @@ export default function useProposalFilters() {
     [
       isActive,
       handleClearFilters,
+      handlePoposalCountIncrease,
+      handleRankingFilterChange,
       handleStatusFilterChange,
       handleSupportFilterChange,
       handleTypeFilterChange,
+      proposalCount,
+      rankingFilter,
       statusFilter,
       supportFilter,
       typeFilter,
@@ -85,17 +108,10 @@ export default function useProposalFilters() {
 }
 
 function getQueryArgsByFilter(key, filter) {
-  if (filter === NULL_FILTER_STATE) {
+  if (key !== 'ranking' && filter === NULL_FILTER_STATE) {
     return null
   }
 
-  let queryKey
-  if (key === 'status') {
-    queryKey = 'statuses'
-  }
-  if (key === 'type') {
-    queryKey = 'types'
-  }
-
-  return { [queryKey]: [filterArgsMapping[key][filter]] }
+  const { queryKey } = filterArgsMapping[key]
+  return { [queryKey]: filterArgsMapping[key][filter] }
 }

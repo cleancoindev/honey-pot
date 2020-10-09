@@ -47,8 +47,12 @@ const Home = React.memo(function Home() {
           <ProposalsList
             activeFilters={filters.isActive}
             proposals={proposals}
+            onProposalCountIncrease={filters.onProposalCountIncrease}
+            onRankingFilterChange={filters.ranking.onChange}
             onStakeToProposal={actions.stakeToProposal}
             onWithdrawFromProposal={actions.withdrawFromProposal}
+            rankingItems={filters.ranking.items}
+            selectedRanking={filters.ranking.filter}
           />
           <HeroBanner onRequestNewProposal={proposalPanel.requestOpen} />
         </div>
