@@ -1,5 +1,5 @@
 import React from 'react'
-import { GU, useTheme } from '@1hive/1hive-ui'
+import { GU, Link, useTheme } from '@1hive/1hive-ui'
 import AccountModule from '../Account/AccountModule'
 import BalanceModule from '../BalanceModule'
 import Layout from '../Layout'
@@ -37,7 +37,9 @@ function Header({ compact }) {
               align-items: center;
             `}
           >
-            {compact ? BeeIcon : <img src={logoSvg} height="40" alt="" />}
+            <Link href="#/home" external={false}>
+              {compact ? BeeIcon : <img src={logoSvg} height="40" alt="" />}
+            </Link>
             <nav
               css={`
                 display: flex;

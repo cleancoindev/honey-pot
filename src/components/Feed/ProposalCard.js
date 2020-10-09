@@ -18,8 +18,10 @@ function ProposalCard({ proposal, onStakeToProposal, onWithdrawFromProposal }) {
   const { requestToken } = useAppState()
 
   const handleSelectProposal = useCallback(() => {
-    history.push(`/proposal/${proposal.number}`)
-  }, [history, proposal.number])
+    const entityPath =
+      proposal.type === ProposalTypes.Decision ? 'vote' : 'proposal'
+    history.push(`/${entityPath}/${proposal.number}`)
+  }, [history, proposal.number, proposal.type])
 
   return (
     <div

@@ -81,7 +81,7 @@ function ProposalDetail({ match }) {
   } = proposal || {}
 
   const handleBack = useCallback(() => {
-    history.push('/proposals')
+    history.push('/home')
   }, [history])
 
   const handleCancelProposal = useCallback(() => {
