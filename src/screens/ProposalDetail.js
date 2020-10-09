@@ -119,7 +119,11 @@ function ProposalDetail({ match }) {
   const signalingProposal = addressesEqual(beneficiary, ZERO_ADDR)
 
   return (
-    <div>
+    <div
+      css={`
+        margin-top: ${3 * GU}px;
+      `}
+    >
       <Bar>
         <BackButton onClick={handleBack} />
       </Bar>

@@ -18,9 +18,8 @@ export default function useProposalLogic(match) {
     ? config?.voting.id
     : config?.conviction.id
 
-  // TODO: Move to proposalLogic file?
-  const actions = useActions()
   const panelState = usePanelState()
+  const actions = useActions(panelState.requestClose)
   const [proposal, blockHasLoaded] = useProposal(proposalId, appAddress)
 
   return {
