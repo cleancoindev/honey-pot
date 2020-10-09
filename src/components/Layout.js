@@ -2,11 +2,11 @@ import React from 'react'
 import { Layout } from '@1hive/1hive-ui'
 import { BREAKPOINTS } from '../styles/breakpoints'
 
-function CustomLayout({ children }) {
+function CustomLayout({ children, paddingBottom = 0 }) {
   return (
     <Layout
       breakpoints={BREAKPOINTS}
-      paddingBottom={0}
+      paddingBottom={paddingBottom}
       css={`
         min-width: auto;
       `}

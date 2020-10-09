@@ -1,5 +1,5 @@
 import React from 'react'
-import { useViewport } from '@1hive/1hive-ui'
+import { GU, ScrollView, useViewport } from '@1hive/1hive-ui'
 
 import Footer from './Footer'
 import Header from './Header/Header'
@@ -17,22 +17,23 @@ function MainView({ children }) {
         height: 100vh;
       `}
     >
-      <Header compact={compactMode} />
-
       <div
         css={`
-          flex: 1 0 auto;
+          flex-shrink: 0;
         `}
       >
+        <Header compact={compactMode} />
+      </div>
+      <ScrollView>
         <div
           css={`
-            height: 100%;
+            flex-grow: 1;
           `}
         >
-          <Layout>{children}</Layout>
+          <Layout paddingBottom={3 * GU}>{children}</Layout>
         </div>
         <Footer compact={compactMode} />
-      </div>
+      </ScrollView>
     </div>
   )
 }
