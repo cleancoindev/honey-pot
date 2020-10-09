@@ -10,16 +10,13 @@ import ProposalsList from '../components/Feed/ProposalsList'
 import useAppLogic from '../logic/app-logic'
 
 const Home = React.memo(function Home() {
-  const { actions, isLoading, proposals, proposalPanel } = useAppLogic()
-
   const {
-    proposalStatusFilter,
-    proposalSupportFilter,
-    proposalTypeFilter,
-    handleStatusFilterChange,
-    handleSupportFilterChange,
-    handleTypeFilterChange,
-  } = {}
+    actions,
+    filters,
+    isLoading,
+    proposals,
+    proposalPanel,
+  } = useAppLogic()
 
   return (
     <div
@@ -36,15 +33,19 @@ const Home = React.memo(function Home() {
           `}
         >
           <FilterSidebar
-            proposalsSize={proposals.length}
-            proposalStatusFilter={proposalStatusFilter}
-            proposalSupportFilter={proposalSupportFilter}
-            proposalTypeFilter={proposalTypeFilter}
-            onStatusFilterChange={handleStatusFilterChange}
-            onSupportFilterChange={handleSupportFilterChange}
-            onTypeFilterChange={handleTypeFilterChange}
+            itemsStatus={filters.status.items}
+            itemsSupport={filters.support.items}
+            itemsType={filters.type.items}
+            proposalStatusFilter={filters.status.filter}
+            proposalSupportFilter={filters.support.filter}
+            proposalTypeFilter={filters.type.filter}
+            onClearFilters={filters.onClear}
+            onStatusFilterChange={filters.status.onChange}
+            onSupportFilterChange={filters.support.onChange}
+            onTypeFilterChange={filters.type.onChange}
           />
           <ProposalsList
+            activeFilters={filters.isActive}
             proposals={proposals}
             onStakeToProposal={actions.stakeToProposal}
             onWithdrawFromProposal={actions.withdrawFromProposal}

@@ -26,12 +26,16 @@ function ListItem({ index, item, selected, onSelect }) {
 
   return (
     <div
-      onCLick={handleOnClick}
+      onClick={handleOnClick}
       css={`
         margin-bottom: ${1 * GU}px;
         color: ${theme.contentSecondary};
 
-        ${selected === index && `color:${theme.content}`};
+        ${selected === index
+          ? `
+          color:${theme.content};
+        `
+          : 'cursor:pointer;'};
       `}
     >
       {item}

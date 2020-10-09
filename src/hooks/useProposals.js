@@ -1,6 +1,14 @@
 import { useMemo } from 'react'
 import BigNumber from '../lib/bigNumber'
 import { useLatestBlock } from './useBlock'
+import { useAccountStakes } from './useStakes'
+import { useAppState } from '../providers/AppState'
+import useProposalFilters from './useProposalFilters'
+import {
+  useProposalSubscription,
+  useProposalsSubscription,
+} from './useSubscriptions'
+import { useWallet } from '../providers/Wallet'
 import {
   calculateThreshold,
   getCurrentConviction,
@@ -10,12 +18,8 @@ import {
   getMinNeededStake,
   getRemainingTimeToPass,
 } from '../lib/conviction'
-import { useAppState } from '../providers/AppState'
-import {
-  useProposalSubscription,
-  useProposalsSubscription,
-} from './useSubscriptions'
-import { useWallet } from '../providers/Wallet'
+import { testSupportFilter } from '../utils/filter-utils'
+import { getProposalSupportStatus } from '../lib/proposal-utils'
 
 const TIME_UNIT = (60 * 60 * 24) / 15
 
@@ -24,7 +28,8 @@ export function useProposals() {
   const { config, isLoading, vaultBalance, effectiveSupply } = useAppState()
 
   const latestBlock = useLatestBlock()
-  const proposals = useProposalsSubscription()
+  const filters = useProposalFilters()
+  const proposals = useFilteredProposals(filters, account)
 
   const proposalsWithData = useMemo(() => {
     if (isLoading) {
@@ -51,7 +56,26 @@ export function useProposals() {
     vaultBalance,
   ])
 
-  return [proposalsWithData, latestBlock.number !== 0]
+  return [proposalsWithData, filters, latestBlock.number !== 0]
+}
+
+function useFilteredProposals(filters, account) {
+  const myStakes = useAccountStakes(account)
+  // Proposals already come filtered by Status and Type from the subgraph.
+  // We will filter locally by support filter.
+  const proposals = useProposalsSubscription(filters)
+
+  return useMemo(
+    () =>
+      proposals?.filter(proposal => {
+        const proposalSupportStatus = getProposalSupportStatus(
+          myStakes,
+          proposal
+        )
+        return testSupportFilter(filters.support.filter, proposalSupportStatus)
+      }),
+    [filters, myStakes, proposals]
+  )
 }
 
 export function useProposal(proposalId, appAddress) {

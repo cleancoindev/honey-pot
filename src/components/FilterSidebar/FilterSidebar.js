@@ -1,12 +1,14 @@
 import React from 'react'
 import PropTypes from 'prop-types'
-import styled from 'styled-components'
-import { Button, DropDown, GU, Tag, textStyle, useTheme } from '@1hive/1hive-ui'
+import { Button, DropDown, GU, textStyle, useTheme } from '@1hive/1hive-ui'
 import ListFilter from './ListFilter'
+import { useWallet } from '../../providers/Wallet'
 
 const FilterSidebar = React.memo(
   ({
-    proposalsSize = 0,
+    itemsStatus,
+    itemsSupport,
+    itemsType,
     proposalStatusFilter,
     proposalSupportFilter,
     proposalTypeFilter,
@@ -16,7 +18,8 @@ const FilterSidebar = React.memo(
     onTypeFilterChange,
   }) => {
     const theme = useTheme()
-    const supportFilterDisabled = proposalStatusFilter === 1
+    const { account } = useWallet()
+    const supportFilterDisabled = proposalStatusFilter > 1 || !account
 
     return (
       <div
@@ -51,7 +54,7 @@ const FilterSidebar = React.memo(
             <Button onClick={onClearFilters} label="Clear" size="mini" />
           </div>
           <ListFilter
-            items={['All', 'Suggestion', 'Proposal', 'Decision']}
+            items={itemsType}
             selected={proposalTypeFilter}
             onChange={onTypeFilterChange}
           />
@@ -72,9 +75,8 @@ const FilterSidebar = React.memo(
           </label>
           <DropDown
             header="Status"
-            items={['All', 'Open', 'Closed', 'Removed']}
+            items={itemsStatus}
             onChange={onStatusFilterChange}
-            placeholder="All"
             selected={proposalStatusFilter}
             wide
           />
@@ -92,20 +94,8 @@ const FilterSidebar = React.memo(
             </label>
             <DropDown
               header="Support"
-              items={[
-                <div>
-                  All
-                  {proposalsSize !== -1 && (
-                    <SizeTagWrapper theme={theme.info}>
-                      <Tag limitDigits={4} label={proposalsSize} size="small" />
-                    </SizeTagWrapper>
-                  )}
-                </div>,
-                'Supported',
-                'Not Supported',
-              ]}
+              items={itemsSupport}
               onChange={onSupportFilterChange}
-              placeholder="All"
               selected={proposalSupportFilter}
               wide
             />
@@ -116,16 +106,10 @@ const FilterSidebar = React.memo(
   }
 )
 
-const SizeTagWrapper = styled.span`
-  margin-left: ${1.5 * GU}px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  color: ${({ theme }) => theme};
-`
-
 FilterSidebar.propTypes = {
-  proposalsSize: PropTypes.number,
+  itemsStatus: PropTypes.array.isRequired,
+  itemsSupport: PropTypes.array.isRequired,
+  itemsType: PropTypes.array.isRequired,
   proposalStatusFilter: PropTypes.number.isRequired,
   proposalSupportFilter: PropTypes.number.isRequired,
   proposalTypeFilter: PropTypes.number.isRequired,

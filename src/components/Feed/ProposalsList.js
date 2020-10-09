@@ -1,11 +1,13 @@
 import React from 'react'
-import { Button, textStyle } from '@1hive/1hive-ui'
+import { Button } from '@1hive/1hive-ui'
+import EmptyResults from './EmptyResults'
 import ProposalCard from './ProposalCard'
 import ProposalRankings from './ProposalRankings'
 
 import { useAppState } from '../../providers/AppState'
 
 function ProposalsList({
+  activeFilters,
   proposals,
   onStakeToProposal,
   onWithdrawFromProposal,
@@ -35,15 +37,14 @@ function ProposalsList({
             <Button label="Load more" onClick={increaseProposalCount} />
           </>
         ) : (
-          // TODO: Empty screen
-          <p
-            css={`
-              ${textStyle('title2')};
-              font-weight: 600;
-            `}
-          >
-            No proposals yet!
-          </p>
+          <EmptyResults
+            title={activeFilters ? 'No results found' : 'No proposals yet!'}
+            paragraph={
+              activeFilters
+                ? 'We couldn’t find any proposal matching your filter selection'
+                : ''
+            }
+          />
         )}
       </div>
     </div>
