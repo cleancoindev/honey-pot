@@ -1,5 +1,5 @@
 import React, { useRef } from 'react'
-import { Button } from '@1hive/1hive-ui'
+import { Button, GU } from '@1hive/1hive-ui'
 import EmptyResults from './EmptyResults'
 import ProposalCard from './ProposalCard'
 import ProposalRankings from './ProposalRankings'
@@ -41,7 +41,16 @@ function ProposalsList({
                 />
               )
             })}
-            <Button label="Load more" onClick={onProposalCountIncrease} />
+            <div
+              css={`
+                width: 100%;
+                text-align: center;
+                margin-top: ${6 * GU}px;
+                margin-bottom: ${3 * GU}px;
+              `}
+            >
+              <Button label="Load more" onClick={onProposalCountIncrease} />
+            </div>
           </>
         ) : (
           <EmptyResults

@@ -13,7 +13,10 @@ export function useAccountStakes(account) {
     }
 
     return supporter.stakes.reduce((acc, stake) => {
-      if (stake.proposal.status !== PROPOSAL_STATUS_ACTIVE_STRING) {
+      if (
+        stake.proposal.status !== PROPOSAL_STATUS_ACTIVE_STRING ||
+        stake.amount.eq(0)
+      ) {
         return acc
       }
 
