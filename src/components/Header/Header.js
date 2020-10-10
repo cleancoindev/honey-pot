@@ -49,17 +49,18 @@ function Header({ compact }) {
                 margin-left: ${6.5 * GU}px;
               `}
             >
-              <a
+              <Link
                 href="#/home"
+                external={false}
                 css={`
                   text-decoration: none;
                   color: ${theme.contentSecondary};
                 `}
               >
                 Home
-              </a>
-              <a
-                href="#/gethoney"
+              </Link>
+              <Link
+                href="https://honeyswap.org/#/swap?inputCurrency=0x71850b7e9ee3f13ab46d67167341e4bdc905eef9"
                 css={`
                   text-decoration: none;
                   color: ${theme.contentSecondary};
@@ -67,7 +68,17 @@ function Header({ compact }) {
                 `}
               >
                 Get Honey
-              </a>
+              </Link>
+              <Link
+                href="https://about.1hive.org/"
+                css={`
+                  text-decoration: none;
+                  color: ${theme.contentSecondary};
+                  margin-left: ${4 * GU}px;
+                `}
+              >
+                About
+              </Link>
             </nav>
           </div>
 
