@@ -1,9 +1,10 @@
 import React from 'react'
-import { GU, Root, ScrollView, useViewport } from '@1hive/1hive-ui'
+import { GU, Root, useViewport } from '@1hive/1hive-ui'
 
 import Footer from './Footer'
 import Header from './Header/Header'
 import Layout from './Layout'
+import { ScrollProvider } from '../providers/ScrollProvider'
 
 function MainView({ children }) {
   const { below } = useViewport()
@@ -31,7 +32,7 @@ function MainView({ children }) {
           position: relative;
         `}
       >
-        <ScrollView>
+        <ScrollProvider>
           <div
             css={`
               display: flex;
@@ -48,7 +49,7 @@ function MainView({ children }) {
             </div>
             <Footer compact={compactMode} />
           </div>
-        </ScrollView>
+        </ScrollProvider>
       </Root.Provider>
     </div>
   )
