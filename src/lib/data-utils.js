@@ -52,6 +52,7 @@ function transformStakeData(stake) {
     ...stake,
     amount: new BigNumber(stake.amount),
     createdAt: parseInt(stake.createdAt, 10) * 1000,
+    proposal: transformProposalData(stake.proposal),
   }
 }
 
@@ -62,6 +63,7 @@ function transformStakeHistoryData(stake) {
     createdAt: parseInt(stake.createdAt, 10) * 1000,
     tokensStaked: BigNumber(stake.tokensStaked),
     totalTokensStaked: BigNumber(stake.totalTokensStaked),
+    proposal: transformProposalData(stake.proposal),
   }
 }
 

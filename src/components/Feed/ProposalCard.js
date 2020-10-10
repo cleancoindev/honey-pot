@@ -38,9 +38,11 @@ function ProposalCard({ proposal, onStakeToProposal, onWithdrawFromProposal }) {
         onSelectProposal={handleSelectProposal}
       />
       <div
+        onClick={handleSelectProposal}
         css={`
-          margin-bottom: ${3 * GU}px;
+          cursor: pointer;
           ${textStyle('body1')};
+          margin-bottom: ${3 * GU}px;
         `}
       >
         {proposal.name}

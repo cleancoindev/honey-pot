@@ -64,6 +64,7 @@ export function useProposalsSubscription(filters) {
 
     return () => proposalsSubscription.current.unsubscribe()
   }, [
+    filters.proposalCount,
     filters.ranking,
     filters.status,
     filters.type,
