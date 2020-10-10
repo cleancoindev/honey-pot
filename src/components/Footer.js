@@ -21,6 +21,7 @@ export default function Footer({ compact }) {
           css={`
             display: ${compact ? 'block' : 'flex'};
             align-items: flex-start;
+            margin-bottom: ${5 * GU}px;
 
             & > div {
               margin-bottom: ${2 * GU}px;

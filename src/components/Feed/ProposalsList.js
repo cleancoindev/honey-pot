@@ -1,9 +1,8 @@
-import React, { useEffect, useRef } from 'react'
+import React, { useRef } from 'react'
 import { Button } from '@1hive/1hive-ui'
 import EmptyResults from './EmptyResults'
 import ProposalCard from './ProposalCard'
 import ProposalRankings from './ProposalRankings'
-import { useScroll } from '../../providers/ScrollProvider'
 
 function ProposalsList({
   activeFilters,
@@ -16,14 +15,6 @@ function ProposalsList({
   selectedRanking,
 }) {
   const listRef = useRef()
-  const { removeTarget, setNewTarget } = useScroll()
-
-  useEffect(() => {
-    if (listRef.current) {
-      setNewTarget(listRef.current, onProposalCountIncrease)
-    }
-    return () => removeTarget()
-  }, [onProposalCountIncrease, removeTarget, setNewTarget])
 
   return (
     <div
