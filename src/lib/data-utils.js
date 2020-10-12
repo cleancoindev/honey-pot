@@ -56,6 +56,7 @@ function transformStakeData(stake) {
       ? {
           ...stake.proposal,
           id: stake.proposal.number,
+          type: convertFromString(stake.proposal.type),
         }
       : null,
   }
@@ -72,6 +73,7 @@ function transformStakeHistoryData(stake) {
       ? {
           ...stake.proposal,
           id: stake.proposal.number,
+          type: convertFromString(stake.proposal.type),
         }
       : null,
   }
