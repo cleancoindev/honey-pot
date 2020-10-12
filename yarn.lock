@@ -2888,6 +2888,13 @@
   dependencies:
     wonka "^4.0.14"
 
+"@urql/core@^1.12.3":
+  version "1.13.0"
+  resolved "https://registry.yarnpkg.com/@urql/core/-/core-1.13.0.tgz#811154b5951b4282dd698a8c9dff4ff3825ca215"
+  integrity sha512-g7Kn2a0TDQotOqvGR7bRC+JqviA4TYtiDZH5M9Roszx7LiqZBkViSr5zmdwlNZjR4kSDn+kSXlCV+Ht0Uqls0Q==
+  dependencies:
+    wonka "^4.0.14"
+
 "@walletconnect/client@^1.2.2":
   version "1.2.2"
   resolved "https://registry.yarnpkg.com/@walletconnect/client/-/client-1.2.2.tgz#bbebf8fbaeaf6d54e8b65cdaa67cacb978765eeb"
@@ -19246,6 +19253,7 @@ url@^0.11.0:
     punycode "1.3.2"
     querystring "0.2.0"
 
+<<<<<<< HEAD
 ursa-optional@^0.10.1, ursa-optional@~0.10.0:
   version "0.10.1"
   resolved "https://registry.yarnpkg.com/ursa-optional/-/ursa-optional-0.10.1.tgz#847b9e40a358c41f2264a04d52bba1e92f159adc"
@@ -19253,6 +19261,15 @@ ursa-optional@^0.10.1, ursa-optional@~0.10.0:
   dependencies:
     bindings "^1.5.0"
     nan "^2.14.0"
+=======
+urql@^1.10.1:
+  version "1.10.1"
+  resolved "https://registry.yarnpkg.com/urql/-/urql-1.10.1.tgz#48353c0d02175481377fa95ff150b7449bd2f7c5"
+  integrity sha512-DMafjxLZfWUPSZRs39+wxmrHTqHm4LLfHvKQfSqkmkwneO/Ws5SLJsT/enZcQfLlH0ZWGvBOVHtVt3j0y8HbcQ==
+  dependencies:
+    "@urql/core" "^1.12.3"
+    wonka "^4.0.14"
+>>>>>>> master
 
 use-inside@^0.2.0:
   version "0.2.0"
