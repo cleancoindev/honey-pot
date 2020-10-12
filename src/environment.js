@@ -1,5 +1,3 @@
-import { getNetwork } from './networks'
-
 // rinkeby
 const DEFAULT_CHAIN_ID = 100
 const DEFAULT_APP_NAME = 'conviction-beta'
@@ -15,9 +13,6 @@ const ENV_VARS = {
   },
   FORTMATIC_API_KEY() {
     return process.env.REACT_APP_FORTMATIC_API_KEY || ''
-  },
-  ORG_ADDRESS() {
-    return process.env.REACT_APP_ORG_ADDRESS || getNetwork().honeypot
   },
   PORTIS_DAPP_ID() {
     return process.env.REACT_APP_PORTIS_DAPP_ID || ''
