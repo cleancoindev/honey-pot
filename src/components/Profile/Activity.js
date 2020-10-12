@@ -26,7 +26,7 @@ function Activity({ account }) {
         </h3>
         <div>
           {supporter?.stakesHistory.length ? (
-            supporter?.stakesHistory.map((stake, index) => (
+            supporter.stakesHistory.map((stake, index) => (
               <div
                 key={index}
                 css={`
