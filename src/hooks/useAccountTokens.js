@@ -1,11 +1,9 @@
 import { useMemo } from 'react'
 import { useAccountStakes } from './useStakes'
-import { useAppState } from '../providers/AppState'
 import BigNumber from '../lib/bigNumber'
 
-export default function useAccountTokens(account) {
+export default function useAccountTokens(account, balance) {
   const myStakes = useAccountStakes(account)
-  const { accountBalance } = useAppState()
 
   const activeTokens = useMemo(() => {
     if (!myStakes) {
@@ -17,11 +15,11 @@ export default function useAccountTokens(account) {
   }, [myStakes])
 
   const inactiveTokens = useMemo(() => {
-    if (!accountBalance.gte(0) || !activeTokens) {
+    if (!balance.gte(0) || !activeTokens) {
       return new BigNumber('0')
     }
-    return accountBalance.minus(activeTokens)
-  }, [accountBalance, activeTokens])
+    return balance.minus(activeTokens)
+  }, [activeTokens, balance])
 
   return { activeTokens, inactiveTokens }
 }

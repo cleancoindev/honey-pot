@@ -18,8 +18,7 @@ function ProposalFooter({
   const theme = useTheme()
   const { account } = useWallet()
   const { accountBalance } = useAppState()
-
-  const { inactiveTokens } = useAccountTokens(account)
+  const { inactiveTokens } = useAccountTokens(account, accountBalance)
 
   const supportersCount = useMemo(
     () => proposal.stakes.filter(({ amount }) => amount.gt(0)).length,

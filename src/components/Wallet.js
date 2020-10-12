@@ -1,16 +1,17 @@
 import React from 'react'
 import styled from 'styled-components'
 import { Box, GU, LoadingRing, textStyle, useTheme } from '@1hive/1hive-ui'
+import useAccountTokens from '../hooks/useAccountTokens'
 import { useAppState } from '../providers/AppState'
+import { useTokenBalances } from '../hooks/useOrgHooks'
 
 import { formatTokenAmount, getTokenIconBySymbol } from '../lib/token-utils'
-import useAccountTokens from '../hooks/useAccountTokens'
 
 function Wallet({ account }) {
   const theme = useTheme()
   const { stakeToken } = useAppState()
-  const { accountBalance } = useAppState()
-  const { inactiveTokens } = useAccountTokens(account)
+  const { balance } = useTokenBalances(account, stakeToken)
+  const { inactiveTokens } = useAccountTokens(account, balance)
 
   return (
     <Box padding={0}>
@@ -21,10 +22,10 @@ function Wallet({ account }) {
       >
         <div>
           <Balance
-            amount={accountBalance}
+            amount={balance}
             decimals={stakeToken.decimals}
             label="Balance"
-            loading={accountBalance.lt(0)}
+            loading={balance.lt(0)}
             symbol={stakeToken.symbol}
           />
           <LineSeparator border={theme.border} />
