@@ -10,7 +10,7 @@
     "@aragon/connect-react": "^0.8.0-alpha.5",
     "bignumber.js": "^9.0.0",
     "clipboard-polyfill": "^3.0.0-pre5",
-    "dayjs": "^1.8.34",
+    "dayjs": "^1.11.1",
     "ethers": "5.0.8",
     "is-ipfs": "^2.0.0",
     "qrcode.react": "^1.0.0",
